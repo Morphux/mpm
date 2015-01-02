@@ -8,6 +8,10 @@
 #include "../inc/mpm.h"
 
 int		main(int ac, char **av) {
-	printf("Hi, this is %s\n", PACKAGE_STRING);
+	if (ac == 1)
+		help();
+	else
+		get_opt(ac, av);
+	print_list(options.package);
 	return 0;
 }
