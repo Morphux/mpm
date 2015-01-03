@@ -10,3 +10,16 @@ void	help(void) {
 	printf("\tupdate: \tUpdate the packages\n");
 	_exit(1);
 }
+
+void	error(char *str) {
+	printf("[\033[1;31mERROR\033[0m]: %s\n", str);
+	_exit(1);
+}
+
+void	info(char *str) {
+	printf("[\033[1;33mINFO\033[0m]: %s\n", str);
+}
+
+void	success(char *str) {
+	printf("[\033[1;32mSUCCESS\033[0m]: %s\n", str);
+}
