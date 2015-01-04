@@ -46,7 +46,10 @@ mpm_pinfo	*parse(char *str, mpm_pinfo *packages) {
 	}
 	if (i == 0)
 		error("Config file error");
-	pack_tmp->next = packages;
+	if (packages)
+		pack_tmp->next = packages;
+	else
+		pack_tmp->next = NULL;
 	success("Configuration file: done. Looking for dependencies...");
 	if (pack_tmp->dependencies) {
 		conf = ft_strsplit(pack_tmp->dependencies, ',');
