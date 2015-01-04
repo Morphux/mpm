@@ -64,7 +64,8 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_mpm_OBJECTS = main.$(OBJEXT) help.$(OBJEXT) options.$(OBJEXT) \
 	package.$(OBJEXT) install.$(OBJEXT) functions.$(OBJEXT) \
-	parse.$(OBJEXT)
+	parse.$(OBJEXT) resume.$(OBJEXT) download.$(OBJEXT) \
+	unpack.$(OBJEXT)
 mpm_OBJECTS = $(am_mpm_OBJECTS)
 mpm_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -174,9 +175,12 @@ mpm_SOURCES = main.c \
 				package.c \
 				install.c \
 				functions.c \
-				parse.c
+				parse.c \
+				resume.c \
+				download.c \
+				unpack.c
 
-AM_LDFLAGS = -lcurl
+AM_LDFLAGS = -lcurl -lm
 all: all-am
 
 .SUFFIXES:
@@ -261,6 +265,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/download.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/functions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/help.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/install.Po@am__quote@
@@ -268,6 +273,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/package.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resume.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unpack.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

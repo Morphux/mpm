@@ -40,6 +40,8 @@ mpm_pinfo	*parse(char *str, mpm_pinfo *packages) {
 			pack_tmp->after = return_string(tmp[1]);
 		} else if (!strcmp(tmp[0], "authors")) {
 			pack_tmp->after = return_string(tmp[1]);
+		} else if (!strcmp(tmp[0], "size")) {
+			pack_tmp->size = return_string(tmp[1]);
 		}
 	}
 	if (i == 0)

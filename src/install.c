@@ -53,9 +53,14 @@ mpm_pinfo	*get_info(char *name, mpm_pinfo *packages) {
 
 void	install(mpm_package *p) {
 	mpm_pinfo	*packages;
+
+	if (getuid())
+		error("MPM install must run as a root user !");
 	while (p) {
 		packages = get_info(p->package, packages);
 		p = p->next;
 	}
-	print_packages(packages);
+	/*print_packages(packages);*/
+	resume(packages);
+	download(packages);
 }

@@ -5,5 +5,8 @@ mpm_SOURCES=	main.c \
 				package.c \
 				install.c \
 				functions.c \
-				parse.c
-AM_LDFLAGS = -lcurl
+				parse.c \
+				resume.c \
+				download.c \
+				unpack.c
+AM_LDFLAGS = -lcurl -lm

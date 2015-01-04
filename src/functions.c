@@ -8,6 +8,7 @@ char	*strjoin(char *s1, char *s2) {
 		return NULL;
 	join = memcpy(join, s1, strlen(s1));
 	memcpy(join + strlen(s1), s2, strlen(s2));
+	join[strlen(s1) + strlen(s2)] = 0;
 	return join;
 }
 
