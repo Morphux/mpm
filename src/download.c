@@ -68,9 +68,8 @@ void	download(mpm_pinfo *p) {
 		}
 		curl_easy_cleanup(curl);
 		fflush(stdout);
-		printf("\n");
-		success("Done !");
-		unpacking(getTarName(p->url), p);
+		printf("\nDone!\n");
+		unpack_install(getTarName(p->url), p);
 		p = p->next;
 	}
 	curl_global_cleanup();

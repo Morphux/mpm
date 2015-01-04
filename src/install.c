@@ -42,6 +42,7 @@ static char			*get_web_page(char *name) {
 	}
 }
 
+
 mpm_pinfo	*get_info(char *name, mpm_pinfo *packages) {
 	char	*conf;
 
@@ -49,6 +50,13 @@ mpm_pinfo	*get_info(char *name, mpm_pinfo *packages) {
 	conf = get_web_page(name);
 	packages = parse(conf, packages);
 	return packages;
+}
+
+int		package_len(mpm_pinfo *p) {
+	int		i;
+
+	for (i = 0; p; p = p->next, i++);
+	return i;
 }
 
 void	install(mpm_package *p) {
@@ -61,7 +69,11 @@ void	install(mpm_package *p) {
 		packages = get_info(p->package, packages);
 		p = p->next;
 	}
-/*	print_packages(packages);*/
+	/*print_packages(packages);*/
+	if (!package_len(packages)) {
+		info("No package need to be installed.");
+		_exit(0);
+	}
 	resume(packages);
 	download(packages);
 }

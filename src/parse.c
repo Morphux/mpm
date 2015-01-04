@@ -10,6 +10,15 @@ static char	*return_string(char *str) {
 	return NULL;
 }
 
+int			is_install(mpm_pinfo *p) {
+	DIR	*dir;
+
+	dir = opendir(strjoin("/etc/mpm/", p->name));
+	if (!dir)
+		return 0;
+	return 1;
+}
+
 mpm_pinfo	*parse(char *str, mpm_pinfo *packages) {
 	char		**conf = ft_strsplit(str, '\n'), **tmp;
 	int			i;
@@ -46,17 +55,22 @@ mpm_pinfo	*parse(char *str, mpm_pinfo *packages) {
 	}
 	if (i == 0)
 		error("Config file error");
-	if (packages)
-		pack_tmp->next = packages;
 	else
-		pack_tmp->next = NULL;
-	success("Configuration file: done. Looking for dependencies...");
+		success("Configuration file: done. Looking for dependencies...");
 	if (pack_tmp->dependencies) {
 		conf = ft_strsplit(pack_tmp->dependencies, ',');
 		for (i = 0; conf[i]; i++) {
 			info(strjoin(strjoin("Look's like the package ", pack_tmp->name), " have dependencies."));
 			pack_tmp = get_info(conf[i], pack_tmp);
 		}
+	}
+	if (is_install(pack_tmp)) {
+		info(strjoin("The package ", strjoin(pack_tmp->name, " is already installed !")));
+		return packages;
+	} else if (packages) {
+		pack_tmp->next = packages;
+	} else {
+		pack_tmp->next = NULL;
 	}
 	return pack_tmp;
 }
