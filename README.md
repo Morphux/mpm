@@ -1,4 +1,3 @@
-mpm
-===
+# MPM
 
-Morphux Package Manager
+The Morphux Package Manager.
