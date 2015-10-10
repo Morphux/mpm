@@ -6,6 +6,7 @@ addons:
             - g++
             - build-essential
             - automake
+            - autoconf
             - make
             - libtool
             - shtool
