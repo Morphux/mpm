@@ -53,6 +53,7 @@
  */
 
 #include <sys/types.h>
+__FBSDID("$FreeBSD$");
 
 #include <sys/stat.h>
 
@@ -148,8 +149,7 @@ extract(const char *filename, int do_extract, int flags)
 	 * here, but it requires library routines that can add 500k or
 	 * more to a static executable.
 	 */
-	archive_read_support_format_all(a);
-	archive_read_support_compression_all(a);
+	archive_read_support_format_tar(a);
 	/*
 	 * On my system, enabling other archive formats adds 20k-30k
 	 * each.  Enabling gzip decompression adds about 20k.
