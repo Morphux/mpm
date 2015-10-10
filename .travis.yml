@@ -1,2 +1,10 @@
 language: cpp
+sudo: false
+addons:
+    apt:
+        packages:
+            - g++
+            - build-essential
+            - automake
+            - make
 script: ./configure && make
