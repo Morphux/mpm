@@ -12,7 +12,7 @@
 # include <list>
 # include <iostream>
 # include <string>
-# include <curl.h>
+# include <curl/curl.h>
 # include <json/json.h>
 # include <stdlib.h>
 # include <stdio.h>

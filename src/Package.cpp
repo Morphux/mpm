@@ -67,7 +67,11 @@ void	Package::decompress(void) {
 	struct archive_entry	*entry;
 	int				fd, r, i;
 	size_t			size;
-	off_t			offset;
+	# ifdef __i383__
+	long long int		offset;
+	# else
+	off_t				offset;
+	#endif
 	const void		*buff;
 	std::string		path;
 

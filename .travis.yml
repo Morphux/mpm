@@ -1,8 +1,8 @@
 language: cpp
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y g++ build-essential automake autoconf make libtool shtool autogen intltool
-  - sudo ln -s /usr/bin/aclocal /usr/bin/aclocal-1.14
-  - sudo ln -s /usr/bin/automake /usr/bin/automake-1.14
-
-script: cd ./libs/libarchive-3.1.2/ && /bin/sh build/autogen.sh && cd ../../ && ./configure && make
+sudo: false
+addons:
+    apt:
+        packages:
+            - libcurl14-openssl-dev
+            - libarchive-dev
+script: aclocal && autconf && automake && ./configure && make
