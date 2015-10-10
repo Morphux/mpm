@@ -1,15 +1,5 @@
 language: cpp
-sudo: false
-addons:
-    apt:
-        packages:
-            - g++
-            - build-essential
-            - automake
-            - autoconf
-            - make
-            - libtool
-            - shtool
-            - autogen
-            - intltool
-script: cd ./libs/libarchive-3.1.2/ && autoreconf -f && cd ../../ && ./configure && make
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y g++ build-essential automake autoconf make libtool shtool autogen intltool
+script: cd ./libs/libarchive-3.1.2/ && autoreconf -f && automake && cd ../../ && ./configure && make
