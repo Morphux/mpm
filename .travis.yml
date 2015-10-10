@@ -11,4 +11,5 @@ addons:
             - libtool
             - shtool
             - autogen
-script: ./configure && make
+            - intltool
+script: cd ./libs/libarchive-3.1.2/ && autoreconf -f && cd ../../ && ./configure && make
