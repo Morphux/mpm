@@ -1,0 +1,21 @@
+#MPM
+### Morphux Package Manager
+*Version*: 1.0
+### Dependencies
+```
+autotools
+```
+For portability purposes, the libraries archive, jsoncpp and curl are included in this project.
+
+### Install
+```
+./configure 
+make
+make install
+```
+
+### Configuration
+
+Location in /etc/mpm/config.json
+
+#### Currently in development
