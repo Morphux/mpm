@@ -5,4 +5,4 @@ addons:
         packages:
             - libcurl14-openssl-dev
             - libarchive-dev
-script: aclocal && autconf && automake && ./configure && make
+script: aclocal && autoconf && automake && ./configure && make
