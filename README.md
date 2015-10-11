@@ -1,12 +1,12 @@
 #MPM
 ### Morphux Package Manager
-*Version*: 1.0 [![Build Status](https://travis-ci.org/Morphux/mpm.svg?branch=master)](https://travis-ci.org/Morphux/mpm) 
-
+*Version*: 1.0
 ### Dependencies
 ```
 autotools
+libarchive
+libcurl
 ```
-For portability purposes, the libraries archive, jsoncpp and curl are included in this project.
 
 ### Install
 ```
