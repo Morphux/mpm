@@ -4,8 +4,9 @@
 ### Dependencies
 ```
 autotools
+libarchive
+libcurl
 ```
-For portability purposes, the libraries archive, jsoncpp and curl are included in this project.
 
 ### Install
 ```
