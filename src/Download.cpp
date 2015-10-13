@@ -36,10 +36,9 @@ std::string	Download::_getPackagesInfo(std::string url) {
 	CURLcode	res;
 	std::string	result;
 
-	(void)url;
 	curl = curl_easy_init();
 	if (curl) {
-		curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1/response.json");
+		curl_easy_setopt(curl, CURLOPT_URL, std::string(BASE_URL + std::string("get/") + url).c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Download::_curlCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &result);
 		res = curl_easy_perform(curl);
@@ -80,7 +79,10 @@ void	Download::_addPackage(std::string name) {
 		return ;
 	p = new Package(name, this->_response[name]);
 	if (p->getToInstall()) {
-		Error::warning("Package " + name + " already installed, skipping it");
+		if (p->getError() == "")
+			Error::warning("Package " + name + " already installed, skipping it");
+		else
+			Error::warning("Package " + name + " can not be found, skipping it");
 		delete p;
 		return ;
 	} else if (!p->getToDownload()) {

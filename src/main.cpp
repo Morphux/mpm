@@ -36,6 +36,8 @@ void	execute(void) {
 
 	Options::args.remove(*(Options::args.begin()));
 	if (cmd == "install") {
+		if (getuid())
+			Error::error("Installation needs to be launch as root !");
 		Download *d = new Download(Options::args);
 		d->getAllPackages();
 		d->installAll();

@@ -7,7 +7,7 @@
 #ifndef __DOWNLOAD__
 # define __DOWNLOAD__
 
-# define BASE_URL 127.0.0.1
+# define BASE_URL "http://api.morphux.org/"
 
 # include <list>
 # include <iostream>

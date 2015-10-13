@@ -6,22 +6,27 @@
 
 # include "Package.hpp"
 
-Package::Package(std::string name, Json::Value init) : _name(name), _toDownload(0), _toInstall(0) {
+Package::Package(std::string name, Json::Value init) : _name(name), _error(""), _toDownload(0), _toInstall(0) {
 	Json::ValueIterator		it;
 	std::string				path;
 	struct stat				buffer;
 	int						i;
 
+	if (init.isMember("Error")) {
+		this->_toInstall = 1;
+		this->_error = init["Error"].asString();
+		return ;
+	}
 	path = "/etc/mpm/packages/" + std::string(1, name[0]) + "/" + name;
 	if (!(stat(path.c_str(), &buffer)))
 		this->_toInstall = 1;
 	this->_version = init["version"].asString();
 	this->_size = init["size"].asFloat();
 	this->_packageUrl = init["package"].asString();
-	for (it = init["dependencies"]["needed"].begin(); it != init["dependencies"]["needed"].end(); it++)
-		this->_neededDeps.push_back(it->asString());
-	for (it = init["dependencies"]["optionnal"].begin(); it != init["dependencies"]["optionnal"].end(); it++)
-		this->_optDeps.push_back(it->asString());
+   /* for (it = init["dependencies"]["needed"].begin(); it != init["dependencies"]["needed"].end(); it++)*/
+		//this->_neededDeps.push_back(it->asString());
+	//for (it = init["dependencies"]["optionnal"].begin(); it != init["dependencies"]["optionnal"].end(); it++)
+		/*this->_optDeps.push_back(it->asString());*/
 	for (i = this->_packageUrl.length() - 1; i > 0 && this->_packageUrl[i - 1] != '/'; i--);
 	path = "/tmp/" + this->_packageUrl.substr(i, this->_packageUrl.length() - i);
 	if (!(stat(path.c_str(), &buffer))) {
@@ -67,7 +72,7 @@ void	Package::decompress(void) {
 	struct archive_entry	*entry;
 	int				fd, r, i;
 	size_t			size;
-	# ifdef __i383__
+	# ifdef __i386__
 	long long int		offset;
 	# else
 	off_t				offset;
@@ -256,6 +261,7 @@ void					Package::setExec(Exec *e) { this->_exec = e; };
 std::string				Package::getVersion(void) { return this->_version; };
 std::string				Package::getName(void) { return this->_name; };
 std::string				Package::getUrl(void) { return this->_packageUrl; };
+std::string				Package::getError(void) { return this->_error; };
 std::list<std::string>	Package::getNeededDeps(void) { return this->_neededDeps; };
 std::list<std::string>	Package::getOptionnalDeps(void) { return this->_optDeps; };
 float					Package::getSize(void) { return this->_size; };

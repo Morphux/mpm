@@ -48,6 +48,7 @@ class	Package {
 		std::string					getVersion(void);
 		std::string					getName(void);
 		std::string					getUrl(void);
+		std::string					getError(void);
 		std::list<std::string>		getNeededDeps(void);
 		std::list<std::string>		getOptionnalDeps(void);
 		float						getSize(void);
@@ -61,6 +62,7 @@ class	Package {
 		float			_size;
 		std::string		_archive;
 		std::string		_dir;
+		std::string		_error;
 		std::list<std::string>	_neededDeps;
 		std::list<std::string>	_optDeps;
 		int						_toDownload;

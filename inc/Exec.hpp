@@ -9,6 +9,7 @@
 
 # include <stdlib.h>
 # include <string>
+# include <string.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -28,8 +29,6 @@ class	Exec {
 		void	execute(std::list<std::string> args);
 
 	private:
-		const char						**_listToArray(std::list<std::string> args);
-
 		std::list<std::string>		_path;
 };
 
