@@ -6,7 +6,7 @@
 
 # include "Package.hpp"
 
-Package::Package(std::string name, Json::Value init) : _name(name), _error(""), _toDownload(0), _toInstall(0) {
+Package::Package(std::string name, Json::Value init) : _name(name), _dir(""), _error(""), _toDownload(0), _toInstall(0) {
 	Json::ValueIterator		it;
 	std::string				path;
 	struct stat				buffer;
@@ -17,16 +17,19 @@ Package::Package(std::string name, Json::Value init) : _name(name), _error(""), 
 		this->_error = init["Error"].asString();
 		return ;
 	}
-	path = "/etc/mpm/packages/" + std::string(1, name[0]) + "/" + name;
+	this->_name = init["name"].asString();
+	path = "/etc/mpm/packages/" + std::string(1, this->_name[0]) + "/" + this->_name;
 	if (!(stat(path.c_str(), &buffer)))
 		this->_toInstall = 1;
 	this->_version = init["version"].asString();
 	this->_size = init["size"].asFloat();
 	this->_packageUrl = init["package"].asString();
-   /* for (it = init["dependencies"]["needed"].begin(); it != init["dependencies"]["needed"].end(); it++)*/
-		//this->_neededDeps.push_back(it->asString());
-	//for (it = init["dependencies"]["optionnal"].begin(); it != init["dependencies"]["optionnal"].end(); it++)
-		/*this->_optDeps.push_back(it->asString());*/
+	for (it = init["dependencies"]["needed"].begin(); it != init["dependencies"]["needed"].end(); it++)
+		this->_neededDeps.push_back(it->asString());
+	for (it = init["dependencies"]["recommended"].begin(); it != init["dependencies"]["recommended"].end(); it++)
+		this->_recoDeps.push_back(it->asString());
+	for (it = init["dependencies"]["optionnal"].begin(); it != init["dependencies"]["optionnal"].end(); it++)
+		this->_optDeps.push_back(it->asString());
 	for (i = this->_packageUrl.length() - 1; i > 0 && this->_packageUrl[i - 1] != '/'; i--);
 	path = "/tmp/" + this->_packageUrl.substr(i, this->_packageUrl.length() - i);
 	if (!(stat(path.c_str(), &buffer))) {
@@ -35,14 +38,31 @@ Package::Package(std::string name, Json::Value init) : _name(name), _error(""), 
 	}
 }
 
-Package::Package(std::string name) : _name(name), _toInstall(0) {
+Package::Package(std::string name, int toTest) : _name(name), _toInstall(0) {
 	std::string				path;
 	struct stat				buffer;
 
 	path = "/etc/mpm/packages/" + std::string(1, name[0]) + "/" + name;
 	if (!(stat(path.c_str(), &buffer)))
 		this->_toInstall = 1;
+	if (toTest) {
+		Json::Value		init;
+		Json::ValueIterator		it;
 
+		Error::info("Testing the archive " + name);
+		this->_archive = name;
+		this->decompress();
+		this->readPackageInfos();
+		init = this->_infos;
+		this->_version = init["package"]["version"].asString();
+		this->_name = init["package"]["name"].asString();
+		for (it = init["dependencies"]["needed"].begin(); it != init["dependencies"]["needed"].end(); it++)
+			this->_neededDeps.push_back(it->asString());
+		for (it = init["dependencies"]["recommended"].begin(); it != init["dependencies"]["recommended"].end(); it++)
+			this->_recoDeps.push_back(it->asString());
+		for (it = init["dependencies"]["optionnal"].begin(); it != init["dependencies"]["optionnal"].end(); it++)
+			this->_optDeps.push_back(it->asString());
+	}
 }
 
 Package::~Package(void) {
@@ -50,13 +70,19 @@ Package::~Package(void) {
 }
 
 void	Package::install(void) {
-	this->decompress();
-	this->readPackageInfos();
+	Error::info("Installing " + this->_name + ":");
+	if (this->_dir == "") {
+		this->decompress();
+		this->readPackageInfos();
+	}
 	if (this->_infos["compilation"]["patches"].size())
 		this->patches();
 	if (this->_infos["compilation"]["before"].size())
 		this->before();
-	this->configure();
+	if (this->_infos["compilation"]["configure"].size())
+		this->configure();
+	else
+		chdir("srcs/");
 	this->make();
 	this->minstall();
 	if (this->_infos["compilation"]["after"].size())
@@ -147,7 +173,12 @@ void	Package::configure(void) {
 	Json::Value		val = this->_infos["compilation"]["configure"];
 	Json::ValueIterator		it;
 	std::list<std::string>	args;
+	std::string				key = "configure";
 
+	if (!this->_infos["compilation"].isMember("configure")) {
+		val = this->_infos["compilation"]["config"];
+		key = "config";
+	}
 	chdir("srcs/");
 	Error::info("Configuring package");
 	for (it = val.begin(); it != val.end(); it++) {
@@ -157,7 +188,7 @@ void	Package::configure(void) {
 			args.push_back("--" + it->asString());
 	}
 	args.push_back("--prefix=" + Options::config["installation-directory"].asString());
-	args.push_front("configure");
+	args.push_front(key);
 	this->_exec->execute(args);
 }
 
@@ -263,6 +294,7 @@ std::string				Package::getName(void) { return this->_name; };
 std::string				Package::getUrl(void) { return this->_packageUrl; };
 std::string				Package::getError(void) { return this->_error; };
 std::list<std::string>	Package::getNeededDeps(void) { return this->_neededDeps; };
+std::list<std::string>	Package::getRecDeps(void) { return this->_recoDeps; };
 std::list<std::string>	Package::getOptionnalDeps(void) { return this->_optDeps; };
 float					Package::getSize(void) { return this->_size; };
 int						Package::getToDownload(void) { return this->_toDownload; };

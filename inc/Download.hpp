@@ -24,6 +24,7 @@
 class	Download {
 	public:
 		Download(std::list<std::string>);
+		Download(std::string);
 		~Download(void);
 
 		void	getAllPackages(void);

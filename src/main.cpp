@@ -44,6 +44,9 @@ void	execute(void) {
 	} else if (cmd == "remove") {
 		Manager		*m = new Manager(Options::args);
 		m->uninstall();
+	} else if (cmd == "test") {
+		Download *d = new Download(Options::args.front());
+		d->installAll();
 	} else {
 		Error::error("Unknown action: " + cmd);
 	}

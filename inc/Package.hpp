@@ -26,7 +26,7 @@
 class	Package {
 	public:
 		Package(std::string name, Json::Value init);
-		Package(std::string name);
+		Package(std::string name, int toTest = 0);
 		~Package(void);
 
 		void	install(void);
@@ -50,6 +50,7 @@ class	Package {
 		std::string					getUrl(void);
 		std::string					getError(void);
 		std::list<std::string>		getNeededDeps(void);
+		std::list<std::string>		getRecDeps(void);
 		std::list<std::string>		getOptionnalDeps(void);
 		float						getSize(void);
 		int							getToDownload(void);
@@ -64,6 +65,7 @@ class	Package {
 		std::string		_dir;
 		std::string		_error;
 		std::list<std::string>	_neededDeps;
+		std::list<std::string>	_recoDeps;
 		std::list<std::string>	_optDeps;
 		int						_toDownload;
 		int						_toInstall;

@@ -7,8 +7,33 @@
 #include "Download.hpp"
 
 Download::Download(std::list<std::string> pack) : _packages(pack) {
-	this->_getInfo();
+	if (this->_packages.size() > 0)
+		this->_getInfo();
+	else
+		Error::warning("Need arguments !");
 	return ;
+}
+
+Download::Download(std::string path) {
+	std::list<std::string>				tmp;
+	std::list<std::string>::iterator	it;
+	Package		*p = new Package(path, 1);
+
+	if (p->getNeededDeps().size() > 0) {
+		tmp = p->getNeededDeps();
+		for (it = tmp.begin(); it != tmp.end(); it++)
+			this->_packages.push_back(*it);
+	}
+	if (p->getRecDeps().size() > 0) {
+		tmp = p->getRecDeps();
+		for (it = tmp.begin(); it != tmp.end(); it++)
+			this->_packages.push_back(*it);
+	}
+	if (this->_packages.size() > 0) {
+		this->_getInfo();
+		this->getAllPackages();
+	}
+	this->_packList.push_back(p);
 }
 
 Download::~Download(void) {
@@ -70,9 +95,9 @@ void	Download::_createPackages(std::string file) {
 
 void	Download::_addPackage(std::string name) {
 	Package			*p;
+	std::list<std::string>				tmp;
 	std::list<std::string>::iterator	it;
 	std::list<Package *>::iterator		it2;
-	int									i;
 
 	for (it2 = this->_packList.begin(); it2 != this->_packList.end() && (*it2)->getName() != name; it2++);
 	if (it2 != this->_packList.end())
@@ -92,10 +117,14 @@ void	Download::_addPackage(std::string name) {
 		Error::info("Package " + name + " already downloaded, skipping it");
 	}
 	if (p->getNeededDeps().size() > 0) {
-		for (it = p->getNeededDeps().begin(), i = 0; 
-				it != p->getNeededDeps().end(), i < (int)p->getNeededDeps().size(); it++, i++) {
+		tmp = p->getNeededDeps();
+		for (it = tmp.begin(); it != tmp.end(); it++)
 			this->_addPackage(*it);
-		}
+	}
+	if (p->getRecDeps().size() > 0) {
+		tmp = p->getRecDeps();
+		for (it = tmp.begin(); it != tmp.end(); it++)
+			this->_addPackage(*it);
 	}
 	this->_packList.push_front(p);
 }
