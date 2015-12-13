@@ -85,8 +85,10 @@ void	Package::install(void) {
 		chdir("srcs/");
 	this->make();
 	this->minstall();
-	if (this->_infos["compilation"]["after"].size())
+	if (this->_infos["compilation"]["after"].size()) {
+		chdir("..");
 		this->after();
+	}
 	this->save();
 	this->clean();
 
@@ -96,15 +98,15 @@ void	Package::install(void) {
 void	Package::decompress(void) {
 	struct archive			*a, *ext;
 	struct archive_entry	*entry;
-	int				fd, r, i;
-	size_t			size;
+	int						fd, r, i;
+	size_t					size;
 	# ifdef __i386__
-	long long int		offset;
+	long long int			offset;
 	# else
-	off_t				offset;
+	off_t					offset;
 	#endif
-	const void		*buff;
-	std::string		path;
+	const void				*buff;
+	std::string				path;
 
 	Error::info("Extracting " + this->_archive);
 	a = archive_read_new();

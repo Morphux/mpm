@@ -6,6 +6,10 @@
 
 #include "Download.hpp"
 
+Download::Download(void) {
+	return ;
+}
+
 Download::Download(std::list<std::string> pack) : _packages(pack) {
 	if (this->_packages.size() > 0)
 		this->_getInfo();
@@ -129,7 +133,7 @@ void	Download::_addPackage(std::string name) {
 			this->_addPackage(*it);
 	}
 	this->_packTreated.push_back(p);
-	this->_packList.push_front(p);
+	this->_packList.push_back(p);
 }
 
 size_t	Download::_curlCallback(void *contents, size_t size, size_t nmemb, void *userp) {

@@ -47,6 +47,11 @@ void	execute(void) {
 	} else if (cmd == "test") {
 		Download *d = new Download(Options::args.front());
 		d->installAll();
+	} else if (cmd == "create") {
+		Developer	*d = new Developer();
+		if (Options::args.size() != 2)
+			Error::error("Create usage <package> <url>");
+		d->createPackage(Options::args);
 	} else {
 		Error::error("Unknown action: " + cmd);
 	}

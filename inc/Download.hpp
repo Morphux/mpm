@@ -20,9 +20,11 @@
 # include "Error.hpp"
 # include "Package.hpp"
 # include "Exec.hpp"
+# include "Developer.hpp"
 
 class	Download {
 	public:
+		Download(void);
 		Download(std::list<std::string>);
 		Download(std::string);
 		~Download(void);
