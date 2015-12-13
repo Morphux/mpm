@@ -51,6 +51,7 @@ class	Download {
 		std::string					_test;
 		Json::Value					_response;
 		std::list<Package *>		_packList;
+		std::list<Package *>		_packTreated;
 };
 
 #endif

@@ -51,12 +51,13 @@ void	Error::execError(void) {
 		return ;
 	buffer << fd.rdbuf();
 	lines = split(buffer.str(), '\n');
-	for (it = lines.end(), r = 0; it != lines.begin() && r < 20 && (*it).substr(0, 6) != "======"; it--, r++);
+	for (it = (lines.end())--, r = 0, it--; it != lines.begin() && r < 20 && (*it).substr(0, 6) != "======"; it--, r++) {
+	}
 	if (r == 20)
 		Error::info("Output the last 20 lines. If the information is not here, you might check /var/log/mpm.log");
 	else
 		Error::info("Ouput");
-	for (; it != lines.end(); it++)
+	for (it++; it != lines.end(); it++)
 		std::cout << RED << "> " << DEF << *it << std::endl;
 }
 

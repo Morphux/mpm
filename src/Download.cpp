@@ -99,16 +99,18 @@ void	Download::_addPackage(std::string name) {
 	std::list<std::string>::iterator	it;
 	std::list<Package *>::iterator		it2;
 
-	for (it2 = this->_packList.begin(); it2 != this->_packList.end() && (*it2)->getName() != name; it2++);
-	if (it2 != this->_packList.end())
-		return ;
 	p = new Package(name, this->_response[name]);
+	for (it2 = this->_packTreated.begin(); it2 != this->_packTreated.end() && (*it2)->getName() != p->getName(); it2++);
+	if (it2 != this->_packTreated.end()) {
+		delete p;
+		return ;
+	}
 	if (p->getToInstall()) {
 		if (p->getError() == "")
-			Error::warning("Package " + name + " already installed, skipping it");
+			Error::info("Package " + p->getName() + " already installed, skipping it");
 		else
 			Error::warning("Package " + name + " can not be found, skipping it");
-		delete p;
+		this->_packTreated.push_back(p);
 		return ;
 	} else if (!p->getToDownload()) {
 		Download::totalSize += p->getSize();
@@ -126,6 +128,7 @@ void	Download::_addPackage(std::string name) {
 		for (it = tmp.begin(); it != tmp.end(); it++)
 			this->_addPackage(*it);
 	}
+	this->_packTreated.push_back(p);
 	this->_packList.push_front(p);
 }
 
