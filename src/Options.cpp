@@ -31,7 +31,7 @@ std::string		Options::getOptions(std::string s) {
 }
 
 void	Options::getConfig(void) {
-std::string			file;
+	std::string			file;
 	std::stringstream 	buffer;
 	std::ifstream		fd;
 	Json::Reader		read;

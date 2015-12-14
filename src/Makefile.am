@@ -8,6 +8,7 @@ mpm_SOURCES =	Download.cpp \
 				Options.cpp \
 				Package.cpp \
 				jsoncpp.cpp \
-				Developer.cpp
+				Developer.cpp \
+				Kernel.cpp
 AM_CXXFLAGS =	-Wall -Wextra -Werror -std=c++0x -g -I../inc/
 mpm_LDADD = -lcurl -larchive

@@ -13,5 +13,6 @@
 # include "Error.hpp"
 # include "Download.hpp"
 # include "Manager.hpp"
+# include "Kernel.hpp"
 
 #endif

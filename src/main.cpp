@@ -52,6 +52,10 @@ void	execute(void) {
 		if (Options::args.size() != 2)
 			Error::error("Create usage <package> <url>");
 		d->createPackage(Options::args);
+	} else if (cmd == "kernel") {
+		Kernel	*k = new Kernel();
+		k->make();
+		delete k;
 	} else {
 		Error::error("Unknown action: " + cmd);
 	}
