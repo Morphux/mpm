@@ -59,6 +59,10 @@ void	execute(void) {
 	} else {
 		Error::error("Unknown action: " + cmd);
 	}
+	if (Kernel::recompile) {
+		Kernel	*k = new Kernel();
+		k->install();
+	}
 	Error::info("Quitting");
 }
 

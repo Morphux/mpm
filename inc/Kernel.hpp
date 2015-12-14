@@ -28,6 +28,7 @@ class	Kernel {
 
 		void		setConfig(std::string name, std::string value);
 		void		make(void);
+		void		install(void);
 
 		static int	recompile;
 

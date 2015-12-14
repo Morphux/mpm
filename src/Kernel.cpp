@@ -105,4 +105,17 @@ void	Kernel::make(void) {
 		"/boot/System-map-" + std::string(s_uname.release)});
 }
 
+void	Kernel::install(void) {
+	int		res;
+	Exec	*e = new Exec();
+
+	res = Error::input("Kernel has been recompiled. Reboot now ? [Yes/no] ");
+	for (res = 0; res != 'y' && res != 'n' && res != 'Y' && res != 10; ) {
+		Error::warning("Please type Yes, no or enter.");
+		res = Error::input("Kernel has been recompiled. Reboot now ? [Yes/no] ");
+	}
+	if (res == 'y' || res == 'Y' || res == 10)
+		e->execute({"reboot"});
+}
+
 int		Kernel::recompile = 0;
