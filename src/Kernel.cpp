@@ -98,11 +98,12 @@ void	Kernel::make(void) {
 	e->execute({"make", "modules_install"});
 	Error::info("Installation");
 	e->execute({"cp", "-v", "arch/" + Options::config["arch"].asString() + "/boot/bzImage",
-		"/boot/vmlinuz-" + std::string(s_uname.release) + "-morphux"});
+		"/boot/vmlinuz-" + std::string(s_uname.release) + "-morphux-1.0"});
 	e->execute({"cp", "-v", ".config",
 		"/boot/Config-" + std::string(s_uname.release)});
 	e->execute({"cp", "-v", "System.map",
 		"/boot/System-map-" + std::string(s_uname.release)});
+	Kernel::recompile = 1;
 }
 
 void	Kernel::install(void) {
@@ -110,7 +111,7 @@ void	Kernel::install(void) {
 	Exec	*e = new Exec();
 
 	res = Error::input("Kernel has been recompiled. Reboot now ? [Yes/no] ");
-	for (res = 0; res != 'y' && res != 'n' && res != 'Y' && res != 10; ) {
+	for (; res != 'y' && res != 'n' && res != 'Y' && res != 10; ) {
 		Error::warning("Please type Yes, no or enter.");
 		res = Error::input("Kernel has been recompiled. Reboot now ? [Yes/no] ");
 	}

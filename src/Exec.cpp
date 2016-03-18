@@ -38,8 +38,10 @@ void	Exec::execute(std::list<std::string> args) {
 	fd = open("/var/log/mpm.log", O_WRONLY | O_APPEND | O_CREAT, 0444);
 	Error::log("========================[ " + args.front() + " ]========================\n");
 	if (!(pid = fork())) {
-		dup2(fd, 1);
-		dup2(fd, 2);
+		if (!Options::isOptions("debug")) {
+			dup2(fd, 1);
+			dup2(fd, 2);
+		}
 		// Yup, this is nasty. Why ? Thank's to const standard. (http://stackoverflow.com/questions/190184/execv-and-const-ness)
 		execve(execArguments[0], const_cast<char * const *>(execArguments), const_cast<char * const *>(environ));
 	} 
@@ -47,7 +49,9 @@ void	Exec::execute(std::list<std::string> args) {
 	close(fd);
 	if (status) {
 		Error::warning("Execution of " + args.front() + " went wrong.");
-		Error::execError();
+		if (!Options::isOptions("debug")) {
+			Error::execError();
+		}
 		Error::error("Execution error");
 	}
 }
