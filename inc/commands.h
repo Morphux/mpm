@@ -14,24 +14,20 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
+#ifndef COMMANDS_H
+# define COMMANDS_H
+
 #include <mpm.h>
 
-static const mopts_t    g_args[] = {
-    {
-        .opt = 'v',
-        .desc = "Use verbose mode",
-    },
-    ARGS_EOL
-};
+typedef enum {
+    CMD_INSTALL = 1,
+} cmd_list_t;
 
-int main(int ac, char **av) {
-    mlist_t     *args = NULL;
+typedef struct {
+    cmd_list_t          cmd;
+    mlist_t             *args;
+} commands_t;
 
-    set_program_name(NAME);
-    set_version("0.1");
-    set_maintainer(AUTH);
-    read_opt(ac, av, g_args, &args);
+commands_t      *parse_cmd(mlist_t *args);
 
-    parse_cmd(args);
-    return 0;
-}
+#endif /* COMMANDS_H */

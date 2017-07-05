@@ -19,4 +19,6 @@
 
 # include <libmpm.h>
 
+# include "commands.h"
+
 #endif /* MPM_H */

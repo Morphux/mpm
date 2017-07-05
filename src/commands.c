@@ -14,24 +14,26 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#include <mpm.h>
+#include <commands.h>
 
-static const mopts_t    g_args[] = {
-    {
-        .opt = 'v',
-        .desc = "Use verbose mode",
-    },
-    ARGS_EOL
+static const char      g_commands[] = {
+    "install"
 };
 
-int main(int ac, char **av) {
-    mlist_t     *args = NULL;
+commands_t      *parse_cmd(mlist_t *args) {
+    commands_t  *ret = NULL;
+    mlist_t     *tmp;
+    char        *str;
 
-    set_program_name(NAME);
-    set_version("0.1");
-    set_maintainer(AUTH);
-    read_opt(ac, av, g_args, &args);
-
-    parse_cmd(args);
-    return 0;
+    list_for_each(args, tmp, str)
+    {
+        for (size_t i = 0; i < sizeof(g_commands) / sizeof(g_commands[0]); i++)
+        {
+            if (strncmp(str, g_commands[i], strlen(g_commands[i])) == 0)
+            {
+                printf("Command: %s\n", str);
+            }
+        }
+    }
+    return ret;
 }
