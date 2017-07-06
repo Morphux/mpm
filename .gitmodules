@@ -1,0 +1,3 @@
+[submodule "lib/libmpm"]
+	path = lib/libmpm
+	url = http://github.com/Morphux/libmpm
