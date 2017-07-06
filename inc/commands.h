@@ -21,7 +21,11 @@
 
 typedef enum {
     CMD_NONE = 0,
-    CMD_INSTALL = 1,
+    CMD_INSTALL,
+    CMD_UPDATE,
+    CMD_UPGRADE,
+    CMD_CONFIG,
+    CMD_NEWS
 } cmd_list_t;
 
 typedef struct {

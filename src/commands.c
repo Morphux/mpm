@@ -23,6 +23,10 @@ typedef struct {
 
 static const command_decl_t     g_commands[] = {
     {"install", CMD_INSTALL},
+    {"update", CMD_UPDATE},
+    {"upgrade", CMD_UPGRADE},
+    {"config", CMD_CONFIG},
+    {"news", CMD_NEWS}
 };
 
 #ifdef MPM_SUGG
