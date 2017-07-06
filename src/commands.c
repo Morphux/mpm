@@ -16,7 +16,7 @@
 
 #include <commands.h>
 
-static const char      g_commands[] = {
+static const char      *g_commands[] = {
     "install"
 };
 
@@ -24,6 +24,10 @@ commands_t      *parse_cmd(mlist_t *args) {
     commands_t  *ret = NULL;
     mlist_t     *tmp;
     char        *str;
+
+    ret = malloc(sizeof(*ret));
+    if (ret == NULL)
+        return NULL;
 
     list_for_each(args, tmp, str)
     {
