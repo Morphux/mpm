@@ -32,7 +32,7 @@ SFLAGS =	-Wall -Wextra -Werror
 
 LFLAGS =	-Llib/libmpm -lmpm -pthread -ldl -lz
 
-DFLAGS =	-DNAME="\"$(NAME)\"" -DAUTH="\"$(AUTHOR)\""
+DFLAGS =	-DNAME="\"$(NAME)\"" -DAUTH="\"$(AUTHOR)\"" -DMPM_SUGG
 
 CFLAGS =	$(SFLAGS) $(IFLAGS) $(OFLAGS) $(LFLAGS) $(DFLAGS)
 
