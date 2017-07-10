@@ -19,17 +19,73 @@
 typedef struct {
     char        *str;
     cmd_list_t  flag;
+    char        *help;
 } command_decl_t;
 
 static const command_decl_t     g_commands[] = {
-    {"install", CMD_INSTALL},
-    {"update", CMD_UPDATE},
-    {"upgrade", CMD_UPGRADE},
-    {"config", CMD_CONFIG},
-    {"news", CMD_NEWS},
-    {"remove", CMD_REMOVE},
-    {"purge", CMD_PURGE},
-    {"doctor", CMD_DOCTOR}
+    {
+        .str = "install",
+        .flag = CMD_INSTALL,
+        .help = "Install a package. You can either install a local .mpx archive\n\
+or request one from the package server, with a name.\n\
+Examples:\n\
+    - sudo mpm install system/ls\n\
+    - sudo mpm install /tmp/ls-2.4.mpx"
+    },
+    {
+        .str = "update",
+        .flag = CMD_UPDATE,
+        .help = "Update local database with new packages.\n\
+This commands doest not update any package, see upgrade for that."
+    },
+    {
+        .str = "upgrade",
+        .flag = CMD_UPGRADE,
+        .help = "Upgrade local packages when possible\n\
+By default, this command will upgrade all the packages on the system.\n\
+    - sudo mpm upgrade\n\
+You can specify a package to upgrade:\n\
+    - sudo mpm upgrade some_package\n\
+Or via globbing:\n\
+    - sudo mpm upgrade \"all_pkg_*\"\n\
+Note that the double quotes '\"' are important."
+    },
+    {
+        .str = "config",
+        .flag = CMD_CONFIG,
+        .help = "List, create change global configuration values"
+    },
+    {
+        .str = "news",
+        .flag = CMD_NEWS,
+        .help = "List news on installed packages\n\
+You can specify a package after the command:\n\
+    - sudo mpm news pkg"
+    },
+    {
+        .str = "remove",
+        .flag = CMD_REMOVE,
+        .help = "Remove a package from the system\n\
+    - sudo mpm remove package\n\
+This command will only remove binaries and libraries, configuration will be keeped\n\
+See purge for more information"
+    },
+    {
+        .str = "purge",
+        .flag = CMD_PURGE,
+        .help = "Purge a package from the system\n\
+    - sudo mpm purge package\n\
+This command will remove binaries, libraries and every file created by the package\n\
+See remove for more information"
+    },
+    {
+        .str = "doctor",
+        .flag = CMD_DOCTOR,
+        .help = "Fix the system\n\
+This command will try to fix the system in certain ways:\n\
+    - Fix file rights on known system files\n\
+    - Check for orphaned packages, and fix them"
+    }
 };
 
 #ifdef MPM_SUGG
@@ -65,10 +121,43 @@ void    commands_suggestion(const char *str) {
 
     }
     m_info("Did you mean: 'mpm %s' ?\n", g_commands[highest_score].str);
-    exit(1);
 }
 
 #endif
+
+void command_help(void) {
+    size_t j;
+
+    printf("\n");
+    for (size_t i = 0; i < sizeof(g_commands) / sizeof(g_commands[0]); i++)
+    {
+        m_info("\e[1m%s\e[0m", g_commands[i].str);
+        for (j = 0; j + strlen(g_commands[i].str) < 15; j++, printf(" "))
+            ;
+
+        printf(": ");
+        for (size_t h = 0, k = 0; g_commands[i].help[h] != '\0'; h++, k++)
+        {
+            if (k + j > 80 || g_commands[i].help[h] == '\n')
+            {
+                printf("\n  ");
+                for (k = 0; k < 15; k++, printf(" "))
+                    ;
+                k = 0;
+                if (g_commands[i].help[h] == '\n')
+                {
+                    if (h + 1 == strlen(g_commands[i].help))
+                        break ;
+                    h++;
+                }
+                printf(": ");
+            }
+            printf("%c", g_commands[i].help[h]);
+        }
+        printf("\n\n");
+        fflush(stdout);
+    }
+}
 
 commands_t      *parse_cmd(mlist_t *args) {
     commands_t  *ret = NULL;
@@ -95,12 +184,11 @@ commands_t      *parse_cmd(mlist_t *args) {
         if (ret->cmd == CMD_NONE)
         {
             free(ret);
-#ifndef MPM_SUGG
-            m_error("Unknow command: %s\n", str);
-#else
-            m_warning("Unknown command: %s\n", str);
+            m_warning("Unknow command: %s\n", str);
+#ifdef MPM_SUGG
             commands_suggestion(str);
 #endif
+            command_help();
         }
     }
     return ret;
