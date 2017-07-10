@@ -25,7 +25,10 @@ typedef enum {
     CMD_UPDATE,
     CMD_UPGRADE,
     CMD_CONFIG,
-    CMD_NEWS
+    CMD_NEWS,
+    CMD_REMOVE,
+    CMD_PURGE,
+    CMD_DOCTOR
 } cmd_list_t;
 
 typedef struct {

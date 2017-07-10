@@ -26,7 +26,10 @@ static const command_decl_t     g_commands[] = {
     {"update", CMD_UPDATE},
     {"upgrade", CMD_UPGRADE},
     {"config", CMD_CONFIG},
-    {"news", CMD_NEWS}
+    {"news", CMD_NEWS},
+    {"remove", CMD_REMOVE},
+    {"purge", CMD_PURGE},
+    {"doctor", CMD_DOCTOR}
 };
 
 #ifdef MPM_SUGG
