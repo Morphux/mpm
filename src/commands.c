@@ -27,7 +27,7 @@ static const command_decl_t     g_commands[] = {
         .str = "install",
         .flag = CMD_INSTALL,
         .help = "Install a package. You can either install a local .mpx archive\n\
-or request one from the package server, with a name.\n\
+or request one from the package server, with a name\n\
 Examples:\n\
     - sudo mpm install system/ls\n\
     - sudo mpm install /tmp/ls-2.4.mpx"
@@ -36,19 +36,19 @@ Examples:\n\
         .str = "update",
         .flag = CMD_UPDATE,
         .help = "Update local database with new packages.\n\
-This commands doest not update any package, see upgrade for that."
+This commands doest not update any package, see upgrade for that"
     },
     {
         .str = "upgrade",
         .flag = CMD_UPGRADE,
         .help = "Upgrade local packages when possible\n\
-By default, this command will upgrade all the packages on the system.\n\
+By default, this command will upgrade all the packages on the system\n\
     - sudo mpm upgrade\n\
 You can specify a package to upgrade:\n\
     - sudo mpm upgrade some_package\n\
 Or via globbing:\n\
     - sudo mpm upgrade \"all_pkg_*\"\n\
-Note that the double quotes '\"' are important."
+Note that the double quotes '\"' are important"
     },
     {
         .str = "config",
@@ -85,6 +85,11 @@ See remove for more information"
 This command will try to fix the system in certain ways:\n\
     - Fix file rights on known system files\n\
     - Check for orphaned packages, and fix them"
+    },
+    {
+        .str = "make-pkg",
+        .flag = CMD_MAKEPKG,
+        .help = "Create a Morphux Package Archive (MPX)"
     }
 };
 
