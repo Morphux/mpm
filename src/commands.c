@@ -154,7 +154,12 @@ void command_help(void) {
             }
             printf("%c", g_commands[i].help[h]);
         }
-        printf("\n\n");
+
+        if (i + 1 < sizeof(g_commands) / sizeof(g_commands[0]))
+            printf("\n\n");
+        else
+            printf("\n");
+
         fflush(stdout);
     }
 }
