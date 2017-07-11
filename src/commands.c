@@ -167,33 +167,29 @@ void command_help(void) {
 
         fflush(stdout);
     }
+    exit(1);
 }
 
-commands_t      *parse_cmd(mlist_t *args) {
-    commands_t  *ret = NULL;
+void parse_cmd(mlist_t **args, commands_t *ret) {
     mlist_t     *tmp;
     char        *str;
 
-    ret = malloc(sizeof(*ret));
-    if (ret == NULL)
-        return NULL;
-
+    assert(ret != NULL);
     ret->cmd = CMD_NONE;
 
-    list_for_each(args, tmp, str)
+    list_for_each(*args, tmp, str)
     {
         for (size_t i = 0; i < sizeof(g_commands) / sizeof(g_commands[0]); i++)
         {
             if (strncmp(str, g_commands[i].str, strlen(g_commands[i].str)) == 0)
             {
                 ret->cmd = g_commands[i].flag;
-                printf("Command: %s\n", str);
+                list_del(*args, str, strlen(str), NULL);
                 break ;
             }
         }
         if (ret->cmd == CMD_NONE)
         {
-            free(ret);
             m_warning("Unknow command: %s\n", str);
 #ifdef MPM_SUGG
             commands_suggestion(str);
@@ -201,5 +197,9 @@ commands_t      *parse_cmd(mlist_t *args) {
             command_help();
         }
     }
-    return ret;
+    if (ret->cmd == CMD_NONE)
+    {
+        m_warning("Mpm need at least one action");
+        command_help();
+    }
 }

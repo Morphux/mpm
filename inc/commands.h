@@ -40,7 +40,8 @@ typedef struct {
 /*!
  * \brief Parse mpm main commands
  *
- * \param args Chained list of arguments, after flag parsing
+ * \param args Pointer to the head of a chained list of arguments, after flag parsing
+ * \param ret Pointer on command_t structure
  *
  * \note This function, on error, can make some score testing for suggestion.
  * Mpm needs to be compiled with MPM_SUGG for that.
@@ -48,6 +49,6 @@ typedef struct {
  * \return A command_t pointer, with the rest of the arguments, and the
  * command type in the cmd member (cmd_list_t).
  */
-commands_t      *parse_cmd(mlist_t *args);
+void parse_cmd(mlist_t **args, commands_t *ret);
 
 #endif /* COMMANDS_H */
