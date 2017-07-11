@@ -19,12 +19,23 @@
 static const mopts_t    g_args[] = {
     {
         .opt = 'v',
+        .s_opt = "verbose",
         .desc = "Use verbose mode",
     },
     {
         .opt = 'd',
         .s_opt = "directory",
         .desc = "Set a directory"
+    },
+    {
+        .opt = 'y',
+        .s_opt = "yes",
+        .desc = "Skip any user input, and choose the default option"
+    },
+    {
+        .opt = 'c',
+        .s_opt = "load-config",
+        .desc = "Load configuration from a file"
     },
     ARGS_EOL
 };
