@@ -174,6 +174,7 @@ void parse_cmd(mlist_t *args) {
                 list_del(args, str, strlen(str), NULL);
                 assert(g_commands[i].fn != NULL);
                 g_commands[i].fn(args);
+                list_free(args, NULL);
                 return ;
             }
         }
