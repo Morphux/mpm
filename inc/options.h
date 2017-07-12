@@ -14,12 +14,58 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#ifndef MPM_H
-# define MPM_H
+#ifndef OPTIONS_H
+# define OPTIONS_H
 
-# include <libmpm.h>
+# include <mpm.h>
 
-# include "commands.h"
-# include "options.h"
+# define CONF_MAX_VERBOSE 3
 
-#endif /* MPM_H */
+/*!
+ * \brief Free the options allocations
+ */
+void mpm_config_free(void);
+
+/*!
+ * \brief Increment verbose level
+ * \note The parameter is ignored
+ */
+bool config_inc_verbose(const char *s);
+
+/*!
+ * \brief Set the directory option
+ */
+bool config_set_directory(const char *s);
+
+/*!
+ * \brief Set the 'yes' (skip input) to true
+ * \note The parameter is ignored
+ */
+bool config_set_yes(const char *s);
+
+/*!
+ * \brief Set the load config file path
+ */
+bool config_set_load_config(const char *s);
+
+/*!
+ * \brief Get the option 'directory'
+ */
+char *config_get_directory(void);
+
+/*!
+ * \brief Get the option 'load-config'
+ */
+char *config_get_load_config(void);
+
+/*!
+ * \brief Get verbose level
+ */
+int config_get_verbose(void);
+
+/*!
+ * \brief Get the value of the 'yes' option
+ */
+bool config_get_yes(void);
+
+#endif /* OPTIONS_H */

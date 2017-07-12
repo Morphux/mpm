@@ -21,21 +21,29 @@ static const mopts_t    g_args[] = {
         .opt = 'v',
         .s_opt = "verbose",
         .desc = "Use verbose mode",
+        .callback = config_inc_verbose
     },
     {
         .opt = 'd',
         .s_opt = "directory",
-        .desc = "Set a directory"
+        .desc = "Set a directory",
+        .take_arg = true,
+        .usage = "directory",
+        .callback = config_set_directory
     },
     {
         .opt = 'y',
         .s_opt = "yes",
-        .desc = "Skip any user input, and choose the default option"
+        .desc = "Skip any user input, and choose the default option",
+        .callback = config_set_yes
     },
     {
         .opt = 'c',
         .s_opt = "load-config",
-        .desc = "Load configuration from a file"
+        .desc = "Load configuration from a file",
+        .take_arg = true,
+        .usage = "file",
+        .callback = config_set_load_config
     },
     ARGS_EOL
 };
@@ -56,5 +64,9 @@ int main(int ac, char **av) {
     list_for_each(args, tmp, str) {
         printf("%s\n", str);
     }
+
+    printf("%d\n", config_get_verbose());
+
+    mpm_config_free();
     return 0;
 }
