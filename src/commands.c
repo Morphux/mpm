@@ -18,14 +18,13 @@
 
 typedef struct {
     char        *str;
-    cmd_list_t  flag;
     char        *help;
+    void        (*fn)(mlist_t *);
 } command_decl_t;
 
 static const command_decl_t     g_commands[] = {
     {
         .str = "install",
-        .flag = CMD_INSTALL,
         .help = "Install a package. You can either install a local .mpx archive\n\
 or request one from the package server, with a name\n\
 Examples:\n\
@@ -34,13 +33,11 @@ Examples:\n\
     },
     {
         .str = "update",
-        .flag = CMD_UPDATE,
         .help = "Update local database with new packages.\n\
 This commands doest not update any package, see upgrade for that"
     },
     {
         .str = "upgrade",
-        .flag = CMD_UPGRADE,
         .help = "Upgrade local packages when possible\n\
 By default, this command will upgrade all the packages on the system\n\
     - sudo mpm upgrade\n\
@@ -52,19 +49,16 @@ Note that the double quotes '\"' are important"
     },
     {
         .str = "config",
-        .flag = CMD_CONFIG,
         .help = "List, create change global configuration values"
     },
     {
         .str = "news",
-        .flag = CMD_NEWS,
         .help = "List news on installed packages\n\
 You can specify a package after the command:\n\
     - sudo mpm news pkg"
     },
     {
         .str = "remove",
-        .flag = CMD_REMOVE,
         .help = "Remove a package from the system\n\
     - sudo mpm remove package\n\
 This command will only remove binaries and libraries, configuration will be keeped\n\
@@ -72,7 +66,6 @@ See purge for more information"
     },
     {
         .str = "purge",
-        .flag = CMD_PURGE,
         .help = "Purge a package from the system\n\
     - sudo mpm purge package\n\
 This command will remove binaries, libraries and every file created by the package\n\
@@ -80,7 +73,6 @@ See remove for more information"
     },
     {
         .str = "doctor",
-        .flag = CMD_DOCTOR,
         .help = "Fix the system\n\
 This command will try to fix the system in certain ways:\n\
     - Fix file rights on known system files\n\
@@ -88,7 +80,6 @@ This command will try to fix the system in certain ways:\n\
     },
     {
         .str = "make-pkg",
-        .flag = CMD_MAKEPKG,
         .help = "Create a Morphux Package Archive (MPX)"
     }
 };
@@ -170,36 +161,28 @@ void command_help(void) {
     exit(1);
 }
 
-void parse_cmd(mlist_t **args, commands_t *ret) {
+void parse_cmd(mlist_t *args) {
     mlist_t     *tmp;
     char        *str;
 
-    assert(ret != NULL);
-    ret->cmd = CMD_NONE;
-
-    list_for_each(*args, tmp, str)
+    list_for_each(args, tmp, str)
     {
         for (size_t i = 0; i < sizeof(g_commands) / sizeof(g_commands[0]); i++)
         {
             if (strncmp(str, g_commands[i].str, strlen(g_commands[i].str)) == 0)
             {
-                ret->cmd = g_commands[i].flag;
-                list_del(*args, str, strlen(str), NULL);
-                break ;
+                list_del(args, str, strlen(str), NULL);
+                assert(g_commands[i].fn != NULL);
+                g_commands[i].fn(args);
+                return ;
             }
         }
-        if (ret->cmd == CMD_NONE)
-        {
-            m_warning("Unknow command: %s\n", str);
+        m_warning("Unknow command: %s\n", str);
 #ifdef MPM_SUGG
-            commands_suggestion(str);
+        commands_suggestion(str);
 #endif
-            command_help();
-        }
-    }
-    if (ret->cmd == CMD_NONE)
-    {
-        m_warning("Mpm need at least one action");
         command_help();
     }
+    m_warning("Mpm need at least one action");
+    command_help();
 }

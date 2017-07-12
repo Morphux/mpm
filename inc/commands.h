@@ -19,36 +19,14 @@
 
 #include <mpm.h>
 
-typedef enum {
-    CMD_NONE = 0,
-    CMD_INSTALL,
-    CMD_UPDATE,
-    CMD_UPGRADE,
-    CMD_CONFIG,
-    CMD_NEWS,
-    CMD_REMOVE,
-    CMD_PURGE,
-    CMD_DOCTOR,
-    CMD_MAKEPKG
-} cmd_list_t;
-
-typedef struct {
-    cmd_list_t          cmd;
-    mlist_t             *args;
-} commands_t;
-
 /*!
  * \brief Parse mpm main commands
  *
  * \param args Pointer to the head of a chained list of arguments, after flag parsing
- * \param ret Pointer on command_t structure
  *
  * \note This function, on error, can make some score testing for suggestion.
  * Mpm needs to be compiled with MPM_SUGG for that.
- *
- * \return A command_t pointer, with the rest of the arguments, and the
- * command type in the cmd member (cmd_list_t).
  */
-void parse_cmd(mlist_t **args, commands_t *ret);
+void parse_cmd(mlist_t *args);
 
 #endif /* COMMANDS_H */

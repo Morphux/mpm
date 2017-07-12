@@ -50,21 +50,13 @@ static const mopts_t    g_args[] = {
 
 int main(int ac, char **av) {
     mlist_t     *args = NULL;
-    commands_t  cmd;
 
     set_program_name(NAME);
     set_version("0.1");
     set_maintainer(AUTH);
     read_opt(ac, av, g_args, &args);
 
-    parse_cmd(&args, &cmd);
-    printf("After parsing:\n");
-    mlist_t *tmp;
-    char *str;
-    list_for_each(args, tmp, str) {
-        printf("%s\n", str);
-    }
-
+    parse_cmd(args);
     printf("%d\n", config_get_verbose());
 
     mpm_config_free();
