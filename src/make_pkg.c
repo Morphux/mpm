@@ -14,58 +14,56 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#include <mpm.h>
+#include <make_pkg.h>
 
-static const mopts_t    g_args[] = {
-    {
-        .opt = 'v',
-        .s_opt = "verbose",
-        .desc = "Use verbose mode",
-        .callback = config_inc_verbose
-    },
-    {
-        .opt = 'd',
-        .s_opt = "directory",
-        .desc = "Set a directory",
-        .take_arg = true,
-        .usage = "directory",
-        .callback = config_set_directory
-    },
-    {
-        .opt = 'y',
-        .s_opt = "yes",
-        .desc = "Skip any user input, and choose the default option",
-        .callback = config_set_yes
-    },
-    {
-        .opt = 'c',
-        .s_opt = "load-config",
-        .desc = "Load configuration from a file",
-        .take_arg = true,
-        .usage = "file",
-        .callback = config_set_load_config
-    },
-    {
-        .opt = 'o',
-        .s_opt = "output",
-        .desc = "Output to a file",
-        .take_arg = true,
-        .usage = "file",
-        .callback = config_set_output
-    },
-    ARGS_EOL
-};
+void make_pkg(mlist_t *args) {
+    packer_t    *pkg = NULL;
+    mlist_t     *tmp;
+    char        *str, *path = "./", *temp;
 
-int main(int ac, char **av) {
-    mlist_t     *args = NULL;
+    if (list_size(args) == 0)
+    {
+        m_warning("The make-pkg command needs a directory\n");
+        return ;
+    }
 
-    set_program_name(NAME);
-    set_version("0.1");
-    set_maintainer(AUTH);
-    read_opt(ac, av, g_args, &args);
+    list_for_each(args, tmp, str)
+    {
+        pkg = packer_init_dir(str);
+        if (pkg == NULL)
+            goto error;
 
-    parse_cmd(args);
+        if (packer_read_dir(pkg) == false)
+        {
+            packer_free(pkg);
+            goto error;
+        }
 
-    mpm_config_free();
-    return 0;
+        if (config_get_directory() != NULL)
+            path = strdup(config_get_directory());
+
+        if (config_get_output() != NULL)
+        {
+            asprintf(&temp, "%s/%s", path, config_get_output());
+            free(path);
+            path = temp;
+        }
+        else
+            asprintf(&path, "%s/%s-%s" PACKER_DEF_EXT, path,
+                        pkg->__pkg_name, pkg->__pkg_version);
+
+        if (packer_create_archive(pkg, path) == false)
+        {
+            packer_free(pkg);
+            goto error;
+        }
+        m_info("Archive has been created: %s\n", path);
+        packer_free(pkg);
+        free(path);
+    }
+
+    return ;
+
+error:
+    m_warning("Error: %s\n", GET_ERR_STR());
 }

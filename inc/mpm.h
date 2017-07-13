@@ -22,4 +22,6 @@
 # include "commands.h"
 # include "options.h"
 
+# include "make_pkg.h"
+
 #endif /* MPM_H */

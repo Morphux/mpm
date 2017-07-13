@@ -68,4 +68,14 @@ int config_get_verbose(void);
  */
 bool config_get_yes(void);
 
+/*!
+ * \brief Set output option
+ */
+bool config_set_output(const char *s);
+
+/*!
+ * \brief Get output option
+ */
+char *config_get_output(void);
+
 #endif /* OPTIONS_H */

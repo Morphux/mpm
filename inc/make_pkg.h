@@ -14,58 +14,11 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#include <mpm.h>
+#ifndef MAKE_PKG_H
+# define MAKE_PKG_H
 
-static const mopts_t    g_args[] = {
-    {
-        .opt = 'v',
-        .s_opt = "verbose",
-        .desc = "Use verbose mode",
-        .callback = config_inc_verbose
-    },
-    {
-        .opt = 'd',
-        .s_opt = "directory",
-        .desc = "Set a directory",
-        .take_arg = true,
-        .usage = "directory",
-        .callback = config_set_directory
-    },
-    {
-        .opt = 'y',
-        .s_opt = "yes",
-        .desc = "Skip any user input, and choose the default option",
-        .callback = config_set_yes
-    },
-    {
-        .opt = 'c',
-        .s_opt = "load-config",
-        .desc = "Load configuration from a file",
-        .take_arg = true,
-        .usage = "file",
-        .callback = config_set_load_config
-    },
-    {
-        .opt = 'o',
-        .s_opt = "output",
-        .desc = "Output to a file",
-        .take_arg = true,
-        .usage = "file",
-        .callback = config_set_output
-    },
-    ARGS_EOL
-};
+# include <mpm.h>
 
-int main(int ac, char **av) {
-    mlist_t     *args = NULL;
+void make_pkg(mlist_t *args);
 
-    set_program_name(NAME);
-    set_version("0.1");
-    set_maintainer(AUTH);
-    read_opt(ac, av, g_args, &args);
-
-    parse_cmd(args);
-
-    mpm_config_free();
-    return 0;
-}
+#endif /* MAKE_PKG_H */

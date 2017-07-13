@@ -80,7 +80,8 @@ This command will try to fix the system in certain ways:\n\
     },
     {
         .str = "make-pkg",
-        .help = "Create a Morphux Package Archive (MPX)"
+        .help = "Create a Morphux Package Archive (MPX)",
+        .fn = make_pkg
     }
 };
 

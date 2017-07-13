@@ -21,18 +21,21 @@ typedef struct {
     char        *directory;
     bool        yes;
     char        *load_config;
+    char        *output;
 } mpm_options_t;
 
 static mpm_options_t g_mpm_opt = {
     .verbose = 0,
     .directory = NULL,
     .yes = false,
-    .load_config = NULL
+    .load_config = NULL,
+    .output = NULL
 };
 
 void mpm_config_free(void) {
     free(g_mpm_opt.directory);
     free(g_mpm_opt.load_config);
+    free(g_mpm_opt.output);
 }
 
 bool config_inc_verbose(const char *s) {
@@ -76,4 +79,14 @@ bool config_set_load_config(const char *s) {
 
 char *config_get_load_config(void) {
     return g_mpm_opt.load_config;
+}
+
+bool config_set_output(const char *s) {
+    if (s != NULL)
+        g_mpm_opt.output = strdup(s);
+    return true;
+}
+
+char *config_get_output(void) {
+    return g_mpm_opt.output;
 }
