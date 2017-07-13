@@ -14,15 +14,18 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#ifndef MPM_H
-# define MPM_H
+#ifndef MPM_CONFIG_H
+# define MPM_CONFIG_H
 
-# include <libmpm.h>
+# include <mpm.h>
 
-# include "commands.h"
-# include "options.h"
-# include "mpm_config.h"
+/*!
+ * \brief Init configuration
+ *
+ * \note This function will try to read a configuration from different
+ * directories. If the option 'c' is passed, the function will read
+ * from that path.
+ */
+void init_config(void);
 
-# include "make_pkg.h"
-
-#endif /* MPM_H */
+#endif /* CONFIG_H */

@@ -14,15 +14,46 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#ifndef MPM_H
-# define MPM_H
+#include "mpm_config.h"
 
-# include <libmpm.h>
+static const char *g_default_paths[] = {
+    "~/.mpm",
+    "~/.config/mpm",
+    "/etc/mpm",
+};
 
-# include "commands.h"
-# include "options.h"
-# include "mpm_config.h"
+void init_config(void) {
+    config_t    *ptr;
+    char                *path;
 
-# include "make_pkg.h"
+    for (size_t i = 0; i < sizeof(g_default_paths) / sizeof(g_default_paths[0]); i++)
+    {
+        if (g_default_paths[i][0] == '~')
+        {
+            asprintf(&path, "%s/%s/" CONFIG_DEF_FN, secure_getenv("HOME"),
+                &(g_default_paths[i][1]));
+        }
+        else
+        {
+            asprintf(&path, "%s/" CONFIG_DEF_FN, g_default_paths[i]);
+        }
+        if (file_exist(path) == true)
+        {
+            u8_t        ret;
 
-#endif /* MPM_H */
+            ptr = parse_config(path, &ret);
+            if (ptr == NULL)
+                printf("Error !\n");
+            free(path);
+            return ;
+        }
+        free(path);
+    }
+
+    m_warning("Cannot find a configuration file in the system.\n");
+    m_warning("Places mpm search:\n");
+    for (size_t i = 0; i < sizeof(g_default_paths) / sizeof(g_default_paths[0]); i++)
+        m_info("%s\n", g_default_paths[i]);
+    m_panic("You can specify a custom config file via the -c option.");
+    return ;
+}

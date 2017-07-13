@@ -28,7 +28,7 @@ IFLAGS =	-I inc/ \
 
 OFLAGS =	-std=gnu99 -g -O3
 
-SFLAGS =	-Wall -Wextra -Werror
+SFLAGS =	-Wall -Wextra -Werror -Wno-unused-result
 
 LFLAGS =	-Llib/libmpm -lmpm -pthread -ldl -lz
 
