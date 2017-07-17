@@ -78,4 +78,14 @@ bool config_set_output(const char *s);
  */
 char *config_get_output(void);
 
+/*!
+ * \brief Set list option
+ */
+bool config_set_list(const char *s);
+
+/*!
+ * \brief Get list option
+ */
+bool config_get_list(void);
+
 #endif /* OPTIONS_H */

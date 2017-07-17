@@ -28,4 +28,11 @@
  */
 void init_config(void);
 
+/*!
+ * \brief Config cmd
+ *
+ * \param ptr Takes a pointer to the head of a list (can be NULL)
+ */
+void config_cmd(mlist_t *ptr);
+
 #endif /* CONFIG_H */

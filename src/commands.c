@@ -49,7 +49,8 @@ Note that the double quotes '\"' are important"
     },
     {
         .str = "config",
-        .help = "List, create change global configuration values"
+        .help = "List, create change global configuration values",
+        .fn = config_cmd
     },
     {
         .str = "news",

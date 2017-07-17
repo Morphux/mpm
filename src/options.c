@@ -22,6 +22,7 @@ typedef struct {
     bool        yes;
     char        *load_config;
     char        *output;
+    bool        list;
 } mpm_options_t;
 
 static mpm_options_t g_mpm_opt = {
@@ -29,7 +30,8 @@ static mpm_options_t g_mpm_opt = {
     .directory = NULL,
     .yes = false,
     .load_config = NULL,
-    .output = NULL
+    .output = NULL,
+    .list = false
 };
 
 void mpm_config_free(void) {
@@ -89,4 +91,14 @@ bool config_set_output(const char *s) {
 
 char *config_get_output(void) {
     return g_mpm_opt.output;
+}
+
+bool config_set_list(const char *s) {
+    (void)s;
+    g_mpm_opt.list = true;
+    return true;
+}
+
+bool config_get_list(void) {
+    return g_mpm_opt.list;
 }

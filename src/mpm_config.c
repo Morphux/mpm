@@ -77,3 +77,8 @@ read_config:
 
     return ;
 }
+
+void config_cmd(mlist_t *ptr) {
+    printf("%d", config_get_list());
+    (void)ptr;
+}

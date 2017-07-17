@@ -53,6 +53,12 @@ static const mopts_t    g_args[] = {
         .usage = "file",
         .callback = config_set_output
     },
+    {
+        .opt = 'l',
+        .s_opt = "list",
+        .desc = "List everything (Depends on command passed)",
+        .callback = config_set_list
+    },
     ARGS_EOL
 };
 
