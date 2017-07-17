@@ -62,9 +62,9 @@ int main(int ac, char **av) {
     set_program_name(NAME);
     set_version("0.1");
     set_maintainer(AUTH);
-    init_config();
-
     read_opt(ac, av, g_args, &args);
+
+    init_config();
     parse_cmd(args);
 
     mpm_config_free();

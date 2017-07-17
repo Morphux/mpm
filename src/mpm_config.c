@@ -22,9 +22,18 @@ static const char *g_default_paths[] = {
     "/etc/mpm",
 };
 
+static config_t *g_mpm_conf = NULL;
+
 void init_config(void) {
+    char        *path;
+    u8_t        ret;
     config_t    *ptr;
-    char                *path;
+
+    if (config_get_load_config() != NULL)
+    {
+        path = strdup(config_get_load_config());
+        goto read_config;
+    }
 
     for (size_t i = 0; i < sizeof(g_default_paths) / sizeof(g_default_paths[0]); i++)
     {
@@ -37,23 +46,34 @@ void init_config(void) {
         {
             asprintf(&path, "%s/" CONFIG_DEF_FN, g_default_paths[i]);
         }
-        if (file_exist(path) == true)
-        {
-            u8_t        ret;
 
-            ptr = parse_config(path, &ret);
-            if (ptr == NULL)
-                printf("Error !\n");
-            free(path);
-            return ;
-        }
+        if (file_exist(path) == true)
+            goto read_config;
+
         free(path);
     }
 
     m_warning("Cannot find a configuration file in the system.\n");
     m_warning("Places mpm search:\n");
+
     for (size_t i = 0; i < sizeof(g_default_paths) / sizeof(g_default_paths[0]); i++)
         m_info("%s\n", g_default_paths[i]);
+
     m_panic("You can specify a custom config file via the -c option.");
+
+read_config:
+    ptr = parse_config(path, &ret);
+
+    free(path);
+    if (ret != 0)
+    {
+        config_get_error_string(ptr);
+        m_error("Error in the configuration: %s\n", ptr->err);
+        config_free(&ptr);
+        exit(1);
+    }
+
+    g_mpm_conf = ptr;
+
     return ;
 }
