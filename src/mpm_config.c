@@ -141,7 +141,25 @@ static void config_list(void) {
 
 void config_cmd(mlist_t *ptr) {
     if (config_get_list())
+    {
         config_list();
+        return ;
+    }
 
-    (void)ptr;
+    if (ptr == NULL)
+        m_warning("Config command need at least one parameter\n");
+
+    /* Show the value of a configuration token */
+    if (list_size(ptr) == 1)
+    {
+        char *ret = get_conf_str_from_name(g_mpm_conf, ptr->member);
+
+        /* Unknown token */
+        if (ret == NULL)
+        {
+            m_warning("Unknow token: %s\n", ptr->member);
+            return ;
+        }
+        m_info("%s = %s\n", ptr->member, ret);
+    }
 }
