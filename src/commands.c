@@ -167,6 +167,11 @@ void parse_cmd(mlist_t *args) {
     mlist_t     *tmp;
     char        *str;
 
+    if (args == NULL)
+    {
+        m_warning("Mpm need at least one action");
+        command_help();
+    }
     list_for_each(args, tmp, str)
     {
         for (size_t i = 0; i < sizeof(g_commands) / sizeof(g_commands[0]); i++)
@@ -186,6 +191,4 @@ void parse_cmd(mlist_t *args) {
 #endif
         command_help();
     }
-    m_warning("Mpm need at least one action");
-    command_help();
 }
