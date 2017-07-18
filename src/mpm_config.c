@@ -78,7 +78,70 @@ read_config:
     return ;
 }
 
+
+static void print_main_conf(cfg_t *opt) {
+    PRINT_CONF_STR(opt, CONFIG_MAIN_SEC, CONFIG_MAIN_INST_MODE);
+    PRINT_CONF_INT(opt, CONFIG_MAIN_SEC, CONFIG_MAIN_THREAD_INST);
+}
+
+static void print_log_conf(cfg_t *opt) {
+    PRINT_CONF_INT(opt, CONFIG_LOG_SEC, CONFIG_LOG_VERBOSE_LVL);
+    PRINT_CONF_STR(opt, CONFIG_LOG_SEC, CONFIG_LOG_DIR);
+}
+
+static void print_dl_conf(cfg_t *opt) {
+    PRINT_CONF_STR(opt, CONFIG_DL_SEC, CONFIG_DL_MAIN_SITE);
+    PRINT_CONF_INT(opt, CONFIG_DL_SEC, CONFIG_DL_THREAD_DL);
+    PRINT_CONF_STR(opt, CONFIG_DL_SEC, CONFIG_DL_DIR);
+    PRINT_CONF_STR(opt, CONFIG_DL_SEC, CONFIG_DL_MIRROR_LIST);
+}
+
+static void print_comp_conf(cfg_t *opt) {
+    PRINT_CONF_INT(opt, CONFIG_COMP_SEC, CONFIG_COMP_SBU);
+    PRINT_CONF_LIST(opt, CONFIG_COMP_SEC, CONFIG_COMP_CONF_ARG);
+    PRINT_CONF_LIST(opt, CONFIG_COMP_SEC, CONFIG_COMP_MAKE_ARG);
+}
+
+static void print_pkg_conf(cfg_t *opt) {
+    PRINT_CONF_STR(opt, CONFIG_PKG_SEC, CONFIG_PKG_DB);
+    PRINT_CONF_STR(opt, CONFIG_PKG_SEC, CONFIG_PKG_TREE);
+}
+
+static void print_kern_conf(cfg_t *opt) {
+    PRINT_CONF_STR(opt, CONFIG_KERN_SEC, CONFIG_KERN_SRC);
+}
+
+static void print_boot_conf(cfg_t *opt) {
+    PRINT_CONF_INT(opt, CONFIG_BOOT_SEC, CONFIG_BOOT_MNT_WHEN_NEEDED);
+    PRINT_CONF_STR(opt, CONFIG_BOOT_SEC, CONFIG_BOOT_GRUB_DIR);
+}
+
+typedef struct {
+    char        *str;
+    void        (*fn)(cfg_t *);
+} list_config_t;
+
+static const list_config_t g_section_names[] = {
+    {CONFIG_MAIN_SEC, print_main_conf},
+    {CONFIG_LOG_SEC, print_log_conf},
+    {CONFIG_DL_SEC, print_dl_conf},
+    {CONFIG_COMP_SEC, print_comp_conf},
+    {CONFIG_PKG_SEC, print_pkg_conf},
+    {CONFIG_KERN_SEC, print_kern_conf},
+    {CONFIG_BOOT_SEC, print_boot_conf}
+};
+
+static void config_list(void) {
+    for (size_t i = 0; i < COUNTOF(g_section_names); i++)
+    {
+        assert(g_section_names[i].fn != NULL);
+        g_section_names[i].fn(cfg_getsec(g_mpm_conf->ptr, g_section_names[i].str));
+    }
+}
+
 void config_cmd(mlist_t *ptr) {
-    printf("%d", config_get_list());
+    if (config_get_list())
+        config_list();
+
     (void)ptr;
 }

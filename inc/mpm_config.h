@@ -19,6 +19,18 @@
 
 # include <mpm.h>
 
+# define PRINT_CONF_STR(opt, m_sec, str_opt) m_info(m_sec "." str_opt " = %s\n", cfg_getstr(opt, str_opt));
+# define PRINT_CONF_INT(opt, m_sec, str_opt) m_info(m_sec "." str_opt " = %ld\n", cfg_getint(opt, str_opt));
+# define PRINT_CONF_LIST(opt, m_sec, str_opt) m_info(m_sec "." str_opt " = "); \
+    for (size_t __i = 0; __i < cfg_size(opt, str_opt); __i++) \
+    { \
+        fprintf(stdout, "%s", cfg_getnstr(opt, str_opt, __i)); \
+        if (__i + 1 < cfg_size(opt, str_opt)) \
+            fprintf(stdout, ", "); \
+    } \
+    fprintf(stdout, "\n");
+
+
 /*!
  * \brief Init configuration
  *
