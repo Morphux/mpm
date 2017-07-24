@@ -139,6 +139,39 @@ static void config_list(void) {
     }
 }
 
+static void print_single_option(const char *name)
+{
+    cfg_opt_t       *opt = NULL;
+
+    opt = get_opt_from_name(g_mpm_conf, name);
+    if (opt == NULL)
+    {
+        m_warning("Unknow token: %s\n", name);
+        return ;
+    }
+
+    m_info("%s = ", name);
+
+    for (size_t i = 0; i < cfg_opt_size(opt); i++)
+    {
+        switch (opt->type)
+        {
+            case CFGT_STR:
+                fprintf(stdout, "%s", cfg_opt_getnstr(opt, i));
+                break;
+            case CFGT_INT:
+                fprintf(stdout, "%ld", cfg_opt_getnint(opt, i));
+                break;
+            default:
+                assert(!"Unknow config type");
+        }
+
+        if (i + 1 < cfg_opt_size(opt))
+            fprintf(stdout, ", ");
+    }
+    fprintf(stdout, "\n");
+}
+
 void config_cmd(mlist_t *ptr) {
     if (config_get_list())
     {
@@ -149,36 +182,9 @@ void config_cmd(mlist_t *ptr) {
     if (ptr == NULL)
         m_warning("Config command need at least one parameter\n");
 
-    /* Show the value of a configuration token */
+    /* Show the value of one configuration token */
     if (list_size(ptr) == 1)
     {
-        cfg_opt_t       *opt = NULL;
-
-        opt = get_opt_from_name(g_mpm_conf, ptr->member);
-        if (opt == NULL)
-        {
-            m_warning("Unknow token: %s\n", ptr->member);
-            return ;
-        }
-
-        m_info("%s = ", ptr->member);
-        for (size_t i = 0; i < cfg_opt_size(opt); i++)
-        {
-            switch (opt->type)
-            {
-                case CFGT_STR:
-                    fprintf(stdout, "%s", cfg_opt_getnstr(opt, i));
-                    break;
-                case CFGT_INT:
-                    fprintf(stdout, "%ld", cfg_opt_getnint(opt, i));
-                    break;
-                default:
-                    assert(!"Unknow config type");
-            }
-
-            if (i + 1 < cfg_opt_size(opt))
-                fprintf(stdout, ", ");
-        }
-        fprintf(stdout, "\n");
+        print_single_option(ptr->member);
     }
 }
