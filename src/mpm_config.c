@@ -149,17 +149,25 @@ void config_cmd(mlist_t *ptr) {
     if (ptr == NULL)
         m_warning("Config command need at least one parameter\n");
 
+    int ret;
     /* Show the value of a configuration token */
     if (list_size(ptr) == 1)
     {
-        char *ret = get_conf_str_from_name(g_mpm_conf, ptr->member);
-
-        /* Unknown token */
-        if (ret == NULL)
+        switch (get_type_from_name(g_mpm_conf, ptr->member))
         {
-            m_warning("Unknow token: %s\n", ptr->member);
-            return ;
+            case CFGT_STR:
+                m_info("%s = %s\n", ptr->member,
+                    get_conf_str_from_name(g_mpm_conf, ptr->member));
+                break;
+            case CFGT_INT:
+                get_conf_int_from_name(g_mpm_conf, ptr->member, &ret);
+                m_info("%s = %d\n", ptr->member, ret);
+                break;
+            case CFGT_NONE:
+                m_warning("Unknow token: %s\n", ptr->member);
+                break;
+            default:
+                assert(!"Unknow config type");
         }
-        m_info("%s = %s\n", ptr->member, ret);
     }
 }
