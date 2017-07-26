@@ -212,6 +212,15 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
             m_warning("Could not find value '%s' in token '%s'\n", val, token);
         return ;
     }
+    else
+    {
+        for (size_t j = 0; j < opt->nvalues; j++)
+            free(opt->values[j]);
+
+        opt->nvalues = 0;
+        free(opt->values);
+        opt->values = NULL;
+    }
 
     switch (opt->type)
     {
