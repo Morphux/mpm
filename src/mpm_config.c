@@ -178,7 +178,6 @@ static void set_single_opt_val(const char *token, const char *val) {
     assert(token != NULL);
     assert(val != NULL);
 
-    (void)val;
     opt = get_opt_from_name(g_mpm_conf, token);
     if (opt == NULL)
     {
@@ -194,9 +193,11 @@ static void set_single_opt_val(const char *token, const char *val) {
     {
         unsigned long   tmp = 0;
         char            *end_ptr = NULL;
+
         switch (opt->type)
         {
             case CFGT_STR:
+                /* Can't set the value */
                 if (cfg_opt_setnstr(opt, val, 0) != CFG_SUCCESS)
                 {
                     m_warning("Can't set the token %s\n", token);
@@ -205,11 +206,15 @@ static void set_single_opt_val(const char *token, const char *val) {
                 break;
             case CFGT_INT:
                 tmp = strtoul(val, &end_ptr, 10);
+
+                /* Value is not an integer */
                 if (val == end_ptr)
                 {
                     m_warning("The following value is not an integer: %s\n", val);
                     return ;
                 }
+
+                /* Can't set the value */
                 if (cfg_opt_setnint(opt, tmp, 0) != CFG_SUCCESS)
                 {
                     m_warning("Can't set the token %s\n", token);
@@ -246,10 +251,11 @@ void config_cmd(mlist_t *ptr) {
     else
     {
         m_warning("Too many parameters for the config command\n");
+        return ;
     }
 
     /* Saving config, if needed */
-    if (g_mpm_conf->need_save)
+    if (g_mpm_conf->need_save && config_get_dry_run() == false)
     {
         FILE *fp = fopen(g_mpm_conf->fn, "w+");
 

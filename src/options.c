@@ -23,6 +23,7 @@ typedef struct {
     char        *load_config;
     char        *output;
     bool        list;
+    bool        dry_run;
 } mpm_options_t;
 
 static mpm_options_t g_mpm_opt = {
@@ -31,7 +32,8 @@ static mpm_options_t g_mpm_opt = {
     .yes = false,
     .load_config = NULL,
     .output = NULL,
-    .list = false
+    .list = false,
+    .dry_run = false
 };
 
 void mpm_config_free(void) {
@@ -101,4 +103,14 @@ bool config_set_list(const char *s) {
 
 bool config_get_list(void) {
     return g_mpm_opt.list;
+}
+
+bool config_set_dry_run(const char *s) {
+    (void)s;
+    g_mpm_opt.dry_run = true;
+    return true;
+}
+
+bool config_get_dry_run(void) {
+    return g_mpm_opt.dry_run;
 }

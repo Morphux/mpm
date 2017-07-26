@@ -59,6 +59,11 @@ static const mopts_t    g_args[] = {
         .desc = "List everything (Depends on command passed)",
         .callback = config_set_list
     },
+    {
+        .s_opt = "dry-run",
+        .desc = "Do not write anything",
+        .callback = config_set_dry_run
+    },
     ARGS_EOL
 };
 

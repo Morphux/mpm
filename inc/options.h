@@ -88,4 +88,16 @@ bool config_set_list(const char *s);
  */
 bool config_get_list(void);
 
+/*!
+ * \brief Set dry-run option
+ *
+ * \note String parameter is ignored
+ */
+bool config_set_dry_run(const char *s);
+
+/*!
+ * \brief Get the dry-run option
+ */
+bool config_get_dry_run(void);
+
 #endif /* OPTIONS_H */
