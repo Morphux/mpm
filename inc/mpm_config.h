@@ -30,6 +30,7 @@
     } \
     fprintf(stdout, "\n");
 
+# define MPM_CONF_UNKN_TOKEN_FMT "Unknow token: %s\n"
 
 /*!
  * \brief Init configuration

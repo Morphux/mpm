@@ -146,7 +146,7 @@ static void print_single_option(const char *name)
     opt = get_opt_from_name(g_mpm_conf, name);
     if (opt == NULL)
     {
-        m_warning("Unknow token: %s\n", name);
+        m_warning(MPM_CONF_UNKN_TOKEN_FMT, name);
         return ;
     }
 
@@ -172,6 +172,58 @@ static void print_single_option(const char *name)
     fprintf(stdout, "\n");
 }
 
+static void set_single_opt_val(const char *token, const char *val) {
+    cfg_opt_t           *opt = NULL;
+
+    assert(token != NULL);
+    assert(val != NULL);
+
+    (void)val;
+    opt = get_opt_from_name(g_mpm_conf, token);
+    if (opt == NULL)
+    {
+        m_warning(MPM_CONF_UNKN_TOKEN_FMT, token);
+        return ;
+    }
+
+    if (cfg_opt_size(opt) > 1)
+    {
+        /* List */
+    }
+    else
+    {
+        unsigned long   tmp = 0;
+        char            *end_ptr = NULL;
+        switch (opt->type)
+        {
+            case CFGT_STR:
+                if (cfg_opt_setnstr(opt, val, 0) != CFG_SUCCESS)
+                {
+                    m_warning("Can't set the token %s\n", token);
+                    return ;
+                }
+                break;
+            case CFGT_INT:
+                tmp = strtoul(val, &end_ptr, 10);
+                if (val == end_ptr)
+                {
+                    m_warning("The following value is not an integer: %s\n", val);
+                    return ;
+                }
+                if (cfg_opt_setnint(opt, tmp, 0) != CFG_SUCCESS)
+                {
+                    m_warning("Can't set the token %s\n", token);
+                    return ;
+                }
+                break;
+            default:
+                assert(!"Unknown config type");
+
+        }
+    }
+    g_mpm_conf->need_save = true;
+}
+
 void config_cmd(mlist_t *ptr) {
     if (config_get_list())
     {
@@ -186,5 +238,28 @@ void config_cmd(mlist_t *ptr) {
     if (list_size(ptr) == 1)
     {
         print_single_option(ptr->member);
+    }
+    else if (list_size(ptr) == 2)
+    {
+        set_single_opt_val(ptr->member, ptr->next->member);
+    }
+    else
+    {
+        m_warning("Too many parameters for the config command\n");
+    }
+
+    /* Saving config, if needed */
+    if (g_mpm_conf->need_save)
+    {
+        FILE *fp = fopen(g_mpm_conf->fn, "w+");
+
+        if (fp == NULL)
+        {
+            m_warning("Cannot write configuration in the file: %s\n", g_mpm_conf->fn);
+            return ;
+        }
+        cfg_print(g_mpm_conf->ptr, fp);
+        fclose(fp);
+        g_mpm_conf->need_save = false;
     }
 }
