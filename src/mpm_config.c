@@ -172,7 +172,7 @@ static void print_single_option(const char *name)
     fprintf(stdout, "\n");
 }
 
-static void add_single_opt_val(const char *token, const char *val, bool add_to_list) {
+static void add_single_opt_val(const char *token, const char *val, const char *sign) {
     cfg_opt_t           *opt = NULL;
     unsigned long       tmp = 0;
     char                *end_ptr = NULL;
@@ -188,10 +188,8 @@ static void add_single_opt_val(const char *token, const char *val, bool add_to_l
         return ;
     }
 
-    if (add_to_list)
-    {
+    if (strcmp(sign, "+=") == 0)
         index = cfg_opt_size(opt);
-    }
 
     switch (opt->type)
     {
@@ -227,6 +225,12 @@ static void add_single_opt_val(const char *token, const char *val, bool add_to_l
     g_mpm_conf->need_save = true;
 }
 
+static const char *g_sign_list[] = {
+    "+=",
+    "-=",
+    "="
+};
+
 void config_cmd(mlist_t *ptr) {
     if (config_get_list())
     {
@@ -249,16 +253,20 @@ void config_cmd(mlist_t *ptr) {
     else if (list_size(ptr) == 3)
     {
         char    *sign = ptr->next->member;
+        size_t  i;
 
-        if (strcmp(sign, "+=") == 0)
+        for (i = 0; i < COUNTOF(g_sign_list); i++)
         {
-            add_single_opt_val(ptr->member, ptr->next->next->member, true);
+            if (strcmp(g_sign_list[i], sign) == 0)
+                break ;
         }
-        else
+        if (i == COUNTOF(g_sign_list))
         {
             m_warning("Unknown sign: %s\n", sign);
             return ;
         }
+
+        add_single_opt_val(ptr->member, ptr->next->next->member, g_sign_list[i]);
     }
     else
     {
