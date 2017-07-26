@@ -190,6 +190,28 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
 
     if (strcmp(sign, "+=") == 0)
         index = cfg_opt_size(opt);
+    else if (strcmp(sign, "-=") == 0)
+    {
+        bool del = false;
+
+        for (size_t i = 0; i < cfg_opt_size(opt); i++)
+        {
+            if (strcmp(cfg_opt_getnstr(opt, i), val) == 0)
+            {
+                del = true;
+                for (size_t j = i; j + 1 < cfg_opt_size(opt); j++)
+                {
+                    cfg_opt_setnstr(opt, cfg_opt_getnstr(opt, j + 1), j);
+                }
+                free(opt->values[--opt->nvalues]);
+                --i;
+            }
+        }
+
+        if (del == false)
+            m_warning("Could not find value '%s' in token '%s'\n", val, token);
+        return ;
+    }
 
     switch (opt->type)
     {
@@ -248,7 +270,7 @@ void config_cmd(mlist_t *ptr) {
     }
     else if (list_size(ptr) == 2)
     {
-        add_single_opt_val(ptr->member, ptr->next->member, false);
+        add_single_opt_val(ptr->member, ptr->next->member, NULL);
     }
     else if (list_size(ptr) == 3)
     {
