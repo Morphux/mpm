@@ -24,6 +24,8 @@ typedef struct {
     char        *output;
     bool        list;
     bool        dry_run;
+    bool        thread_install;
+    bool        thread_dl;
 } mpm_options_t;
 
 static mpm_options_t g_mpm_opt = {
@@ -33,7 +35,9 @@ static mpm_options_t g_mpm_opt = {
     .load_config = NULL,
     .output = NULL,
     .list = false,
-    .dry_run = false
+    .dry_run = false,
+    .thread_install = false,
+    .thread_dl = false
 };
 
 void mpm_config_free(void) {
@@ -113,4 +117,24 @@ bool config_set_dry_run(const char *s) {
 
 bool config_get_dry_run(void) {
     return g_mpm_opt.dry_run;
+}
+
+bool config_set_thread_install(const char *s) {
+    (void)s;
+    g_mpm_opt.thread_install = true;
+    return true;
+}
+
+bool config_get_thread_install(void) {
+    return g_mpm_opt.thread_install;
+}
+
+bool config_set_thread_dl(const char *s) {
+    (void)s;
+    g_mpm_opt.thread_dl = true;
+    return true;
+}
+
+bool config_get_thread_dl(void) {
+    return g_mpm_opt.thread_dl;
 }

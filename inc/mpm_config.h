@@ -48,4 +48,10 @@ void init_config(void);
  */
 void config_cmd(mlist_t *ptr);
 
+/*!
+ * \brief Apply the options in the global configuration, in order to replace
+ * existings tokens
+ */
+void mpm_apply_options(void);
+
 #endif /* CONFIG_H */

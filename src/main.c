@@ -64,6 +64,16 @@ static const mopts_t    g_args[] = {
         .desc = "Do not write anything",
         .callback = config_set_dry_run
     },
+    {
+        .s_opt = "thread-install",
+        .desc = "Install package concurrently, if possible",
+        .callback = config_set_thread_install
+    },
+    {
+        .s_opt = "thread-dl",
+        .desc = "Download multiple packages at the same time",
+        .callback = config_set_thread_dl
+    },
     ARGS_EOL
 };
 
@@ -76,6 +86,7 @@ int main(int ac, char **av) {
     read_opt(ac, av, g_args, &args);
 
     init_config();
+    mpm_apply_options();
     parse_cmd(args);
 
     mpm_config_free();

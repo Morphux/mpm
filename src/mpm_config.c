@@ -320,3 +320,10 @@ void config_cmd(mlist_t *ptr) {
         g_mpm_conf->need_save = false;
     }
 }
+
+void mpm_apply_options(void) {
+    if (config_get_thread_install() == true)
+        set_conf_int_from_name(g_mpm_conf, CONFIG_MAIN_SEC "." CONFIG_MAIN_THREAD_INST, 1);
+    if (config_get_thread_dl() == true)
+        set_conf_int_from_name(g_mpm_conf, CONFIG_DL_SEC "." CONFIG_DL_THREAD_DL, 1);
+}

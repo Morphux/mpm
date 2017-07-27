@@ -1,6 +1,6 @@
 /*********************************** LICENSE **********************************\
 *                            Copyright 2017 Morphux                            *
-*                                                                              *
+5                                                                              *
 *        Licensed under the Apache License, Version 2.0 (the "License");       *
 *        you may not use this file except in compliance with the License.      *
 *                  You may obtain a copy of the License at                     *
@@ -100,4 +100,27 @@ bool config_set_dry_run(const char *s);
  */
 bool config_get_dry_run(void);
 
+/*!
+ * \brief Set thread-install option
+ *
+ * \note String parameter is ignored
+ */
+bool config_set_thread_install(const char *s);
+
+/*!
+ * \brief Get thread-install option
+ */
+bool config_get_thread_install(void);
+
+/*!
+ * \brief Set thread-dl option
+ *
+ * \note String parameter is ignored
+ */
+bool config_set_thread_dl(const char *s);
+
+/*!
+ * \bried Get thread-dl option
+ */
+bool config_get_thread_dl(void);
 #endif /* OPTIONS_H */
