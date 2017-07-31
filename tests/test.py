@@ -7,7 +7,8 @@ from subprocess import Popen, PIPE, STDOUT, call
 
 dirs = [
     "base/",
-    "config/"
+    "config/",
+    "make-pkg/"
 ]
 
 CMD = ".cmd"
