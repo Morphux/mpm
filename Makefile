@@ -49,8 +49,23 @@ $(NAME): $(OBJS)
 	@echo "CCLD\t\t$(NAME)"
 	@$(CC) $(OBJS) -o $(NAME) $(CFLAGS)
 
+check: all
+	make -C tests/
+
+coverage:
+	make -C lib/libmpm test
+	$(MAKE) fclean all OFLAGS="-std=gnu99 -g -O0 -coverage -DCOMPILE_WITH_TEST -fno-inline"
+	make -C tests/
+	gcov -o src/ $(SRCS)
+
+doc:
+	doxygen docs/doxyfile
+
 clean:
 	rm -f $(OBJS)
+	rm -f *.gcov
+	rm -f src/*.gcno
+	rm -f src/*.gcda
 
 fclean: clean
 	rm -f $(NAME)
