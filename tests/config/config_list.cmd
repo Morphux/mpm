@@ -1,0 +1,1 @@
+mpm config -l
