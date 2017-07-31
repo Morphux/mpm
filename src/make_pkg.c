@@ -40,12 +40,11 @@ void make_pkg(mlist_t *args) {
         }
 
         if (config_get_directory() != NULL)
-            path = strdup(config_get_directory());
+            path = config_get_directory();
 
         if (config_get_output() != NULL)
         {
             asprintf(&temp, "%s/%s", path, config_get_output());
-            free(path);
             path = temp;
         }
         else
@@ -59,7 +58,6 @@ void make_pkg(mlist_t *args) {
         }
         m_info("Archive has been created: %s\n", path);
         packer_free(pkg);
-        free(path);
     }
 
     return ;
