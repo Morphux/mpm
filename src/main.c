@@ -16,6 +16,8 @@
 
 #include <mpm.h>
 
+#ifndef COMPILE_WITH_TEST
+
 static const mopts_t    g_args[] = {
     {
         .opt = 'v',
@@ -92,3 +94,5 @@ int main(int ac, char **av) {
     mpm_config_free();
     return 0;
 }
+
+#endif /* COMPILE_WITH_TEST */

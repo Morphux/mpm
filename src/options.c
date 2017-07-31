@@ -41,9 +41,9 @@ static mpm_options_t g_mpm_opt = {
 };
 
 void mpm_config_free(void) {
-    free(g_mpm_opt.directory);
-    free(g_mpm_opt.load_config);
-    free(g_mpm_opt.output);
+    FREE(g_mpm_opt.directory);
+    FREE(g_mpm_opt.load_config);
+    FREE(g_mpm_opt.output);
 }
 
 bool config_inc_verbose(const char *s) {
