@@ -199,6 +199,15 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
             if (strcmp(cfg_opt_getnstr(opt, i), val) == 0)
             {
                 del = true;
+                /* It's the last member */
+                if (i + 1 == cfg_opt_size(opt))
+                {
+                    printf("Here !\n");
+                    free(opt->values[i]);
+                    opt->nvalues--;
+                    g_mpm_conf->need_save = true;
+                    return ;
+                }
                 for (size_t j = i; j + 1 < cfg_opt_size(opt); j++)
                 {
                     cfg_opt_setnstr(opt, cfg_opt_getnstr(opt, j + 1), j);
@@ -210,6 +219,8 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
 
         if (del == false)
             m_warning("Could not find value '%s' in token '%s'\n", val, token);
+        else
+            g_mpm_conf->need_save = true;
         return ;
     }
     else

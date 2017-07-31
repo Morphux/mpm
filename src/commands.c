@@ -169,7 +169,7 @@ void parse_cmd(mlist_t *args) {
 
     if (args == NULL)
     {
-        m_warning("Mpm need at least one action");
+        m_warning("Mpm need at least one action\n");
         command_help();
     }
     list_for_each(args, tmp, str)
