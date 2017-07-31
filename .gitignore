@@ -12,3 +12,6 @@ mpm
 docs/doxygen_sqlite3.db
 docs/html
 docs/man
+
+# Packages
+*.mpx
