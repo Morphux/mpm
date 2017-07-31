@@ -49,6 +49,9 @@ $(NAME): $(OBJS)
 	@echo "CCLD\t\t$(NAME)"
 	@$(CC) $(OBJS) -o $(NAME) $(CFLAGS)
 
+init:
+	make -C lib/libmpm init re
+
 check: all
 	make -C tests/
 
