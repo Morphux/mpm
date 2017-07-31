@@ -172,6 +172,78 @@ static void print_single_option(const char *name)
     fprintf(stdout, "\n");
 }
 
+/*!
+ * \brief Interpret a syntaxic sign for config
+ *
+ * \param opt Option, pre allocated
+ * \param sign Sign to interpret (Can be =, -= or +=, see g_sign_list)
+ * \parma index Index of the array, used for setters
+ * \param val Value to be set
+ * \param token Token name
+ *
+ * \return true when need a value set
+ */
+static bool interpret_sign(cfg_opt_t *opt, const char *sign, u8_t *index, const char *val, const char *token) {
+
+    assert(sign != NULL);
+    assert(opt != NULL);
+    assert(index != NULL);
+    assert(val != NULL);
+    assert(token != NULL);
+
+    if (strcmp(sign, "+=") == 0)
+        *index = cfg_opt_size(opt);
+    else if (strcmp(sign, "-=") == 0)
+    {
+        bool del = false;
+
+        for (size_t i = 0; i < cfg_opt_size(opt); i++)
+        {
+            if (strcmp(cfg_opt_getnstr(opt, i), val) == 0)
+            {
+                del = true;
+                /* It's the last member */
+                if (i + 1 == cfg_opt_size(opt))
+                {
+                    free(opt->values[i]);
+                    opt->nvalues--;
+                    g_mpm_conf->need_save = true;
+                    return false;
+                }
+                for (size_t j = i; j + 1 < cfg_opt_size(opt); j++)
+                {
+                    cfg_opt_setnstr(opt, cfg_opt_getnstr(opt, j + 1), j);
+                }
+                free(opt->values[--opt->nvalues]);
+                --i;
+            }
+        }
+
+        if (del == false)
+            m_warning("Could not find value '%s' in token '%s'\n", val, token);
+        else
+            g_mpm_conf->need_save = true;
+        return false;
+    }
+    else
+    {
+        for (size_t j = 0; j < opt->nvalues; j++)
+            free(opt->values[j]);
+
+        opt->nvalues = 0;
+        free(opt->values);
+        opt->values = NULL;
+    }
+    return true;
+}
+
+/*!
+ * \brief Add a value to a configuration token
+ *
+ * \param token Token to edit
+ * \param val Value to set
+ * \param sign Sign, used for list operations. Can be NULL
+ */
 static void add_single_opt_val(const char *token, const char *val, const char *sign) {
     cfg_opt_t           *opt = NULL;
     unsigned long       tmp = 0;
@@ -188,49 +260,8 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
         return ;
     }
 
-    if (strcmp(sign, "+=") == 0)
-        index = cfg_opt_size(opt);
-    else if (strcmp(sign, "-=") == 0)
-    {
-        bool del = false;
-
-        for (size_t i = 0; i < cfg_opt_size(opt); i++)
-        {
-            if (strcmp(cfg_opt_getnstr(opt, i), val) == 0)
-            {
-                del = true;
-                /* It's the last member */
-                if (i + 1 == cfg_opt_size(opt))
-                {
-                    free(opt->values[i]);
-                    opt->nvalues--;
-                    g_mpm_conf->need_save = true;
-                    return ;
-                }
-                for (size_t j = i; j + 1 < cfg_opt_size(opt); j++)
-                {
-                    cfg_opt_setnstr(opt, cfg_opt_getnstr(opt, j + 1), j);
-                }
-                free(opt->values[--opt->nvalues]);
-                --i;
-            }
-        }
-
-        if (del == false)
-            m_warning("Could not find value '%s' in token '%s'\n", val, token);
-        else
-            g_mpm_conf->need_save = true;
-        return ;
-    }
-    else
-    {
-        for (size_t j = 0; j < opt->nvalues; j++)
-            free(opt->values[j]);
-
-        opt->nvalues = 0;
-        free(opt->values);
-        opt->values = NULL;
-    }
+    if (sign != NULL && (!interpret_sign(opt, sign, &index, val, token)))
+            return ;
 
     switch (opt->type)
     {
