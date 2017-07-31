@@ -1,3 +1,6 @@
 [submodule "lib/libmpm"]
 	path = lib/libmpm
 	url = http://github.com/Morphux/libmpm
+[submodule "docs/doxygen-theme"]
+	path = docs/doxygen-theme
+	url = https://github.com/Ne02ptzero/doxygen-theme
