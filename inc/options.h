@@ -120,7 +120,7 @@ bool config_get_thread_install(void);
 bool config_set_thread_dl(const char *s);
 
 /*!
- * \bried Get thread-dl option
+ * \brief Get thread-dl option
  */
 bool config_get_thread_dl(void);
 #endif /* OPTIONS_H */
