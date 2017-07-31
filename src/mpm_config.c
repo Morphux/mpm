@@ -202,7 +202,6 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
                 /* It's the last member */
                 if (i + 1 == cfg_opt_size(opt))
                 {
-                    printf("Here !\n");
                     free(opt->values[i]);
                     opt->nvalues--;
                     g_mpm_conf->need_save = true;
