@@ -82,6 +82,7 @@ static const mopts_t    g_args[] = {
 int main(int ac, char **av) {
     mlist_t     *args = NULL;
 
+    mpm_init();
     set_program_name(NAME);
     set_version("0.1");
     set_maintainer(AUTH);

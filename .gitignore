@@ -15,3 +15,6 @@ docs/man
 
 # Packages
 *.mpx
+
+# Tests
+Utests/tests
