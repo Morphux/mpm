@@ -15,3 +15,22 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "MMeRZCl7C+tRRFmONfiR4FFVaoiNNABS1lseoqqtSIO11LB/SZnyN0J5Z6Q8TbLkeYyhQ1HOVLGtlFiUfRRdeBd8qdYUk+lckdY//E0zgMnJo2v4d75pF0RxdSqTzNLq6iB7qhMqfGJzLtoE14sZVmXjgNIVk+5bdVUsC4XgMiM="
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "Morphux/mpm"
+      description: "Build submitted via Travis CI"
+    notification_email: louis@ne02ptzero.me
+    build_command_prepend: "make init"
+    build_command: "make"
+    branch_pattern: "unstable"
