@@ -11,6 +11,7 @@ script:
     - make init
     - make
     - make clean check
+    - make -C Utests/ valgrind
     - make coverage
 
 after_success:

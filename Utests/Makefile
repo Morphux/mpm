@@ -27,6 +27,9 @@ check:
 	$(MAKE)
 	./$(NAME)
 
+valgrind: $(NAME)
+	valgrind --leak-check=full --error-exitcode=1 ./$(NAME)
+
 clean:
 	rm -f $(OBJS)
 
