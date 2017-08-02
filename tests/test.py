@@ -89,9 +89,20 @@ def exec_tests(files, __dir):
             sys.exit(1)
         single_test(test_name, __dir)
 
+def title(string):
+    i = 0
+    while i < LINE_LEN / 2 - len(string) + 11:
+        print("=", end='')
+        i += 1
+    print(" " + string + " ", end='')
+    while i < LINE_LEN - len(string) + 11:
+        print("=", end='')
+        i += 1
+    print("");
+
 def main():
     for __dir in dirs:
-        print("Searching for tests in " + __dir + "...")
+        title(__dir)
         with open(__dir + "order") as order_file:
             exec_tests(order_file.read().split('\n'), __dir)
     print("Results: "+ str(total_tests - failed_test) +" / "+ str(total_tests))
