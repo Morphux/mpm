@@ -14,16 +14,27 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#ifndef MPM_H
-# define MPM_H
+#include <extract_pkg.h>
 
-# include <libmpm.h>
+void extract_pkg(mlist_t *args) {
+    packer_t    *ptr = NULL;
+    bool        ret;
 
-# include "commands.h"
-# include "options.h"
-# include "mpm_config.h"
+    if (list_size(args) == 0)
+    {
+        m_warning("The make-pkg command need a path\n");
+        return ;
+    }
+    ptr = packer_init_archive(args->member);
+    ret = packer_extract_archive(ptr,
+        config_get_output() ? config_get_output() : "./");
 
-# include "make_pkg.h"
-# include "extract_pkg.h"
-
-#endif /* MPM_H */
+    if (ret != true)
+        m_warning("Error: %s\n", GET_ERR_STR());
+    else
+    {
+        m_info("Archive '%s' has been sucessfully extracted to '%s'\n",
+            args->member, (config_get_output() ? config_get_output() : "./"));
+    }
+    packer_free(ptr);
+}

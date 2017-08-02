@@ -14,16 +14,11 @@
 *                       limitations under the License.                         *
 \******************************************************************************/
 
-#ifndef MPM_H
-# define MPM_H
+#ifndef EXTRACT_PKG_H
+# define EXTRACT_PKG_H
 
-# include <libmpm.h>
+# include <mpm.h>
 
-# include "commands.h"
-# include "options.h"
-# include "mpm_config.h"
+void extract_pkg(mlist_t *args);
 
-# include "make_pkg.h"
-# include "extract_pkg.h"
-
-#endif /* MPM_H */
+#endif /* EXTRACT_PKG_H */
