@@ -20,7 +20,7 @@ failed_test = 0
 
 def simple_exec(cmd):
     chdir("../")
-    p = Popen("./" + cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+    p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
     out = p.communicate()[0]
     chdir("./tests")
     return out

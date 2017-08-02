@@ -1,1 +1,1 @@
-./mpm make-pkg lib/libmpm/tests/packer/right && cat test-2.0.mpx | hexdump -C
+tar xf tests/misc/test_package.tar && ./mpm make-pkg right && cat test-2.0.mpx | hexdump -C && rm -rf right

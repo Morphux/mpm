@@ -1,1 +1,1 @@
-mpm config compile.makfefefefefee-args
+./mpm config compile.makfefefefefee-args

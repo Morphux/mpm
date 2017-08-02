@@ -1,1 +1,1 @@
-mpm upd2te
+./mpm upd2te

@@ -1,1 +1,1 @@
-mpm --version
+./mpm --version

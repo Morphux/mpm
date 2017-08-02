@@ -1,1 +1,1 @@
-mpm config -l
+./mpm config -l
