@@ -8,5 +8,5 @@ remove-token-2
 set-wrong-value
 config_load_from_file
 config_no_config
-config_no_config
 config_bad_config
+config_argument_overload
