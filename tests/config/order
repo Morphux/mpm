@@ -10,3 +10,6 @@ config_load_from_file
 config_no_config
 config_bad_config
 config_argument_overload
+config_no_arg
+config_bad_sign
+config_too_many_arguments
