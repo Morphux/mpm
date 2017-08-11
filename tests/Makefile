@@ -1,6 +1,6 @@
 all:
-	mkdir -p ~/.mpm/
-	cp ../lib/libmpm/tests/conf/base.conf ~/.mpm/mpm.conf
+	mkdir -p ~/.config/mpm
+	cp ../lib/libmpm/tests/conf/base.conf ~/.config/mpm/mpm.conf
 	./test.py
 
 
