@@ -359,11 +359,13 @@ void config_cmd(mlist_t *ptr) {
     {
         FILE *fp = fopen(g_mpm_conf->fn, "w+");
 
+#ifndef COMPILE_WITH_TEST
         if (fp == NULL)
         {
             m_warning("Cannot write configuration in the file: %s\n", g_mpm_conf->fn);
             return ;
         }
+#endif
         cfg_print(g_mpm_conf->ptr, fp);
         fclose(fp);
         g_mpm_conf->need_save = false;
