@@ -16,7 +16,7 @@
 
 #include <mpm.h>
 
-#ifndef COMPILE_WITH_TEST
+#ifndef NO_MAIN
 
 static const mopts_t    g_args[] = {
     {

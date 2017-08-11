@@ -58,7 +58,7 @@ check: all
 
 coverage:
 	make -C lib/libmpm test
-	$(MAKE) fclean all OFLAGS="-std=gnu99 -g -O0 -coverage -fno-inline"
+	$(MAKE) fclean all OFLAGS="-std=gnu99 -g -O0 -coverage -fno-inline -DCOMPILE_WITH_TEST -Wno-switch"
 	make -C tests/
 	make -C Utests/ check
 	gcov -o src/ $(SRCS)

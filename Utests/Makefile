@@ -15,7 +15,7 @@ OBJS =		$(SRCS:%.c=%.o)
 COVFLAGS =	"-coverage"
 
 CFLAGS =	-Wall -Wextra -Werror -Wno-unused-result \
-		-std=gnu99 -g -DCOMPILE_WITH_TEST $(IFLAGS) $(COVFLAGS)
+		-std=gnu99 -g -DCOMPILE_WITH_TEST -DNO_MAIN $(IFLAGS) $(COVFLAGS)
 
 all: $(NAME)
 

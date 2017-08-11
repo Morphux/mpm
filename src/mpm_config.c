@@ -162,8 +162,10 @@ static void print_single_option(const char *name)
             case CFGT_INT:
                 fprintf(stdout, "%ld", cfg_opt_getnint(opt, i));
                 break;
+#ifndef COMPILE_WITH_TEST
             default:
                 assert(!"Unknow config type");
+#endif
         }
 
         if (i + 1 < cfg_opt_size(opt))
