@@ -30,10 +30,8 @@ void make_pkg(mlist_t *args) {
     list_for_each(args, tmp, str)
     {
         pkg = packer_init_dir(str);
-        if (pkg == NULL)
-            goto error;
 
-        if (packer_read_dir(pkg) == false)
+        if (pkg == NULL || packer_read_dir(pkg) == false)
         {
             packer_free(pkg);
             goto error;

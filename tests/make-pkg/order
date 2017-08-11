@@ -1,3 +1,6 @@
 wrong_archive
 right_archive
 right_archive_with_output
+make-pkg_no_arguments
+make-pkg_wrong_output
+make-pkg_to_dir
