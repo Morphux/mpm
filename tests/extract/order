@@ -2,3 +2,4 @@ extract_basics
 extract_basics_with_output
 extract_arg_error
 extract_not_an_archive
+extract_no_arg
