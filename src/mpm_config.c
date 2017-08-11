@@ -271,8 +271,10 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
             /* Can't set the value */
             if (cfg_opt_setnstr(opt, val, index) != CFG_SUCCESS)
             {
+#ifndef COMPILE_WITH_TEST
                 m_warning("Can't set the token %s\n", token);
                 return ;
+#endif
             }
             break;
         case CFGT_INT:
@@ -288,12 +290,16 @@ static void add_single_opt_val(const char *token, const char *val, const char *s
             /* Can't set the value */
             if (cfg_opt_setnint(opt, tmp, index) != CFG_SUCCESS)
             {
+#ifndef COMPILE_WITH_TEST
                 m_warning("Can't set the token %s\n", token);
                 return ;
+#endif
             }
             break;
+#ifndef COMPILE_WITH_TEST
         default:
             assert(!"Unknown config type");
+#endif
 
     }
     g_mpm_conf->need_save = true;

@@ -19,3 +19,6 @@ config_del_unknown_value_from_list
 config_rewrite_list
 config_list_delete_operations
 config_list_delete_operations_2
+config_rewrite_integer_with_string
+config_rewrite_unknown_token
+config_rewrite_integer
