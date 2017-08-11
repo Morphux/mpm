@@ -148,11 +148,7 @@ void command_help(void) {
                     ;
                 k = 0;
                 if (g_commands[i].help[h] == '\n')
-                {
-                    if (h + 1 == strlen(g_commands[i].help))
-                        break ;
                     h++;
-                }
                 printf(": ");
             }
             printf("%c", g_commands[i].help[h]);
